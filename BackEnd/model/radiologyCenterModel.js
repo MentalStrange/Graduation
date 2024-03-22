@@ -20,3 +20,6 @@ const radiologyCenterSchema = mongoose.Schema({
     type:String,
   }
 }) 
+
+const RadiologyCenter = mongoose.model("RadiologyCenter",radiologyCenterSchema)
+export default RadiologyCenter

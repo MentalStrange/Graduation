@@ -1,0 +1,125 @@
+import bcrypt from "bcrypt"
+import { patientTransformation } from "../format/transformation.js";
+import Patient from "../model/patientModel.js";
+import Doctor from "../model/doctorModel.js";
+import Radiologist from "../model/radiologistModel.js";
+import RadiologyCenter from "../model/radiologyCenterModel.js";
+const salt = 10;
+export const patientSignUp = async (req, res) => {
+  const patientData = req.body
+  try {
+    const oldPatient = await Patient.findOne({ email: patientData.email })
+    if(oldPatient){
+      return res.status(400).json({
+        status:"fail",
+        message:"Email Already Exists"
+      })
+    }
+    const hashedPassword = await bcrypt.hash(patientData.password,salt)
+    const newPatient = await Patient.create({
+      name:patientData.name,
+      email:patientData.email,
+      nationalId:patientData.nationalId,
+      password:hashedPassword,
+      ...patientData
+    })
+    res.status(200).json({
+      status:"success",
+      data:patientTransformation(newPatient)
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}
+
+export const doctorSignUp = async (req, res) => {
+  const doctorData = req.body
+  try {
+    const oldDoctor = await Doctor.findOne({ email: doctorData.email })
+    if(oldDoctor){
+      return res.status(400).json({
+        status:"fail",
+        message:"Email Already Exists"
+      })
+    }
+    const hashedPassword = await bcrypt.hash(doctorData.password,salt)
+    const newDoctor = await Doctor.create({
+      name:doctorData.name,
+      email:doctorData.email,
+      nationalId:doctorData.nationalId,
+      password:hashedPassword,
+      ...doctorData
+    })
+    res.status(200).json({
+      status:"success",
+      data:doctorTransformation(newDoctor)
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}
+
+export const radiologistSignUp = async (req, res) => {
+  const radiologistData = req.body
+  try {
+    const oldRadiologist = await Radiologist.findOne({ email: radiologistData.email })
+    if(oldRadiologist){
+      return res.status(400).json({
+        status:"fail",
+        message:"Email Already Exists"
+      })
+    }
+    const hashedPassword = await bcrypt.hash(radiologistData.password,salt)
+    const newRadiologist = await Radiologist.create({
+      name:radiologistData.name,
+      email:radiologistData.email,
+      nationalId:radiologistData.nationalId,
+      password:hashedPassword,
+      ...radiologistData
+    })
+    res.status(200).json({
+      status:"success",
+      data:radiologistTransformation(newRadiologist)
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}
+
+export const radiologyCenterSignUp = async (req, res) => {
+  const radiologyCenterData = req.body
+  try {
+    const oldRadiologyCenter = await RadiologyCenter.findOne({ email: radiologyCenterData.email })
+    if(oldRadiologyCenter){
+      return res.status(400).json({
+        status:"fail",
+        message:"Email Already Exists"
+      })
+    }
+    const hashedPassword = await bcrypt.hash(radiologyCenterData.password,salt)
+    const newRadiologyCenter = await RadiologyCenter.create({
+      name:radiologyCenterData.name,
+      email:radiologyCenterData.email,
+      password:hashedPassword,
+      ...radiologyCenterData
+    })
+    res.status(200).json({
+      status:"success",
+      data:radiologyCenterTransformation(newRadiologyCenter)
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}

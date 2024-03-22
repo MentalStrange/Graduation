@@ -49,3 +49,4 @@ const radiologistSchema = mongoose.Schema({
 })
 
 const Radiologist = mongoose.model("Radiologist",radiologistSchema)
+export default Radiologist

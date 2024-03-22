@@ -43,3 +43,6 @@ const patientSchema = mongoose.Schema({
     enum:["active,inActive"]
   },
 })
+
+const Patient = mongoose.model("Patient",patientSchema)
+export default Patient
