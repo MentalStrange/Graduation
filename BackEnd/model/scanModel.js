@@ -1,10 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-const radiologyCenterAppointmentSchema = mongoose.Schema({
+const scanSchema = mongoose.Schema({
   radiologyCenterId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"RadiologyCenter",
     required:[true,"Radiology Center Should Have an Id"]
+  },
+  radiologistId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Radiologist",
+    required:[true,"Radiologist Should Have an Id"]
   },
   userId:{
     type:mongoose.Schema.Types.ObjectId,
@@ -18,10 +23,13 @@ const radiologyCenterAppointmentSchema = mongoose.Schema({
     type:String,
     enum:["guest","patient"],
     default:"guest" 
-  }
-},{
-  timeSlots:true
+  },
+  reportId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Report"
+  },
+
 })
 
-const RadiologyCenterAppointment = mongoose.model('RadiologyCenterAppointment',radiologyCenterAppointmentSchema)
-export default RadiologyCenterAppointment
+const Scan = mongoose.model('Scan',scanSchema )
+export default Scan

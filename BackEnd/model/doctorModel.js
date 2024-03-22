@@ -11,6 +11,11 @@ const doctorSchema = mongoose.Schema({
     unique:true,
     lowercase:true
   },
+  nationalId:{
+    type:Number,
+    unique:true,
+    required:[true,"Receptionist Should Have a National Id"]
+  },
   password:{
     type:String,
     required:[true,"Doctor Should Have a Password"],
@@ -79,6 +84,12 @@ const doctorSchema = mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:'Review'
   }],
+  createdAt:{
+    type:Date,
+    default:Date.now()
+  }
+},{
+  timeSlots:true
 })
 
 // this function will help you in watching changes and to use it in real time...
