@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
+import authRoutes from "./routes/auth.js"
 const app = express()
 
 app.use(express.json())
@@ -27,6 +28,8 @@ app.get("/", (req,res) => {
     </center>`
   )
 })
+
+app.use('/api/v1/auth',authRoutes)
 
 app.listen(process.env.PORT,() => {
   console.log(`server run on => http://localhost:${process.env.PORT}`)

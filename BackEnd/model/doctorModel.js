@@ -93,10 +93,10 @@ const doctorSchema = mongoose.Schema({
 })
 
 // this function will help you in watching changes and to use it in real time...
-doctorSchema.watch().on('change', (data) => {
-  if(data.operationType === 'insert'){
-    console.log(data.fullDocument)
-  }
-})
+// doctorSchema.watch().on('change', (data) => {
+//   if(data.operationType === 'insert'){
+//     console.log(data.fullDocument)
+//   }
+// })
 const Doctor = mongoose.model('Doctor',doctorSchema)
 export default Doctor;
