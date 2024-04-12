@@ -20,3 +20,6 @@ const prescriptionSchema = mongoose.Schema({
     type:String,
   }
 })
+
+const Prescription = mongoose.model("Prescription",prescriptionSchema)
+export default Prescription

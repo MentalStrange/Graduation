@@ -21,18 +21,36 @@ export const getAppointmentsByDoctorId = async (req,res)=>{
       })
     }
   } catch (error) {
-    
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
   }
 }
-
 export const getAppointmentsByPatientId = async (req,res) => {
   const patientId = req.params.id;
   try {
+    const patient = await Patient.findById(patientId);
+    if(!patient){
+      return res.status(404).json({
+        status:"fail",
+        message:"Patient Not Found"
+      })
+    }
+    const appointments = await Appointment.find({userId:patientId});
+    if(appointments.length > 0){
+      const transformAppointments = appointments.map((appointment) => {
+        return appointmentTransformation(appointment)
+      })
+      res.status(200).json({
+        status:"success",
+        data:transformAppointments
+      })
+    }
   }catch(error){
     
   }
 }
-
 export const createAppointmentForPatient = async (req,res) => {
   const appointmentData = req.body;
   try {
