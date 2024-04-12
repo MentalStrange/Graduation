@@ -1,4 +1,5 @@
 import { radiologyCenterAppointmentTransformation } from "../format/transformation.js";
+import RadiologyCenterAppointment from "../model/radiologyCenterAppModel.js";
 
 export const createAppointmentForPatientRadiologyCenter = async (req,res) => {
   const appointmentData = req.body;
@@ -94,5 +95,22 @@ export const deleteRadiologyCenterAppointment = async (req,res) => {
       status:"fail",
       message:error.message
     })
+  }
+}
+export const getRadiologyCenterAppointmentsForPatient = async (req,res) => {
+  const patientId = req.params.id;
+  try {
+    const radiologyCenterAppointments = await RadiologyCenterAppointment.find({userId:patientId});
+    const transformAppointments = radiologyCenterAppointments.map((appointment) => {
+      return radiologyCenterAppointmentTransformation(appointment)
+    })
+    if(radiologyCenterAppointment){
+      return res.status(200).json({
+        status:"success",
+        data:transformAppointments
+      })
+    }
+  }catch(error){
+    
   }
 }
