@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt"
-import { patientTransformation } from "../format/transformation.js";
+import { patientTransformation, receptionistTransformation } from "../format/transformation.js";
 import Patient from "../model/patientModel.js";
 import Doctor from "../model/doctorModel.js";
 import Radiologist from "../model/radiologistModel.js";
 import RadiologyCenter from "../model/radiologyCenterModel.js";
+import Receptionist from "../model/receptionistModel.js";
 const salt = 10;
 export const patientSignUp = async (req, res) => {
   const patientData = req.body
@@ -115,6 +116,34 @@ export const radiologyCenterSignUp = async (req, res) => {
     res.status(200).json({
       status:"success",
       data:radiologyCenterTransformation(newRadiologyCenter)
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}
+export const receptionistSignUp = async (req, res) => {
+  const receptionistData = req.body
+  try {
+    const oldReceptionist = await Receptionist.findOne({ email: receptionistData.email })
+    if(oldReceptionist){
+      return res.status(400).json({
+        status:"fail",
+        message:"Email Already Exists"
+      })
+    }
+    const hashedPassword = await bcrypt.hash(receptionistData.password,salt)
+    const newReceptionist = await Receptionist.create({
+      name:receptionistData.name,
+      email:receptionistData.email,
+      password:hashedPassword,
+      ...receptionistData
+    })
+    res.status(200).json({
+      status:"success",
+      data:receptionistTransformation(newReceptionist)
     })
   } catch (error) {
     return res.status(500).json({

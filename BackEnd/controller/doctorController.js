@@ -52,3 +52,20 @@ export const getAllDoctor = async (req,res) => {
     })
   }
 }
+export const getDoctorById = async (req,res) => {
+  const doctorId = req.params.id;
+  try {
+    const doctor = await Doctor.findById(doctorId);
+    if(doctor){
+      return res.status(200).json({
+        status:"success",
+        data:doctorTransformation(doctor)
+      })
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}

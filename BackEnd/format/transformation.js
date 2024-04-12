@@ -14,6 +14,13 @@ export const doctorTransformation = (doctor) => {
     ...doctor
   }
 }
+export const receptionistTransformation = (receptionist) => {
+  return{
+    name:receptionist.name,
+    email:receptionist.email,
+    ...receptionist
+  }
+}
 export const radiologistTransformation = (radiologist) => {
   return{
     name:radiologist.name,
