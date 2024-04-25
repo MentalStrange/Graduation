@@ -6,7 +6,7 @@ export const patientTransformation = (patient) => {
     ...patient
   }
 }
-export const doctorTransformation = (doctor) => {
+export const doctorTransformation = async (doctor) => {
   return{
     name:doctor.name,
     email:doctor.email,

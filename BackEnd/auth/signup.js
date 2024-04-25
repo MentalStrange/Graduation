@@ -53,9 +53,22 @@ export const doctorSignUp = async (req, res) => {
       password:hashedPassword,
       ...doctorData
     })
+    let status = "approved";
+    Object.entries(newDoctor.toObject()).forEach(([key, value]) => {
+      if (Array.isArray(value) && value.length === 0) {
+        status = "pending";
+      } else if (typeof value === "string" && value.trim() === "") {
+        status = "pending";
+      } else if (typeof value === "number" && isNaN(value)) {
+        status = "pending";
+      }
+    });
+    // Update supplier status
+    newDoctor.status = status;
+    await newDoctor.save();
     res.status(200).json({
       status:"success",
-      data:doctorTransformation(newDoctor)
+      data: await  doctorTransformation(newDoctor)._doc
     })
   } catch (error) {
     return res.status(500).json({
