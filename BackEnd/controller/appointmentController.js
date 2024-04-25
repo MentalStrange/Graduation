@@ -27,6 +27,23 @@ export const getAppointmentsByDoctorId = async (req,res)=>{
     })
   }
 }
+export const getAppointmentById = async (req,res) => {
+  const appointmentId = req.params.id;
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+    if(appointment){
+      return res.status(200).json({
+        status:"success",
+        data:appointmentTransformation(appointment)
+      })
+    }
+  }catch(error){
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}
 export const getAppointmentsByPatientId = async (req,res) => {
   const patientId = req.params.id;
   try {

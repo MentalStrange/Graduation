@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { patientTransformation, receptionistTransformation } from "../format/transformation.js";
+import { doctorTransformation, patientTransformation, receptionistTransformation } from "../format/transformation.js";
 import Patient from "../model/patientModel.js";
 import Doctor from "../model/doctorModel.js";
 import Radiologist from "../model/radiologistModel.js";
@@ -35,7 +35,6 @@ export const patientSignUp = async (req, res) => {
     })
   }
 }
-
 export const doctorSignUp = async (req, res) => {
   const doctorData = req.body
   try {
@@ -65,7 +64,6 @@ export const doctorSignUp = async (req, res) => {
     })
   }
 }
-
 export const radiologistSignUp = async (req, res) => {
   const radiologistData = req.body
   try {
@@ -95,7 +93,6 @@ export const radiologistSignUp = async (req, res) => {
     })
   }
 }
-
 export const radiologyCenterSignUp = async (req, res) => {
   const radiologyCenterData = req.body
   try {

@@ -1,3 +1,6 @@
+import { radiologistTransformation } from "../format/transformation.js";
+import Radiologist from "../model/radiologistModel.js";
+
 export const updateRadiologist = async (req,res) => {
   const radiologist = req.body
   try {
