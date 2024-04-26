@@ -8,11 +8,11 @@ export const updateDoctor = async (req, res) => {
     const updatedDoctor = await Doctor.findByIdAndUpdate(doctorId, req.body, {
       new: true,
     });
+    await checkApproved(updatedDoctor);
     if (updatedDoctor) {
       return res.status(200).json({
         status: "success",
         data: await doctorTransformation(updatedDoctor),
-        checkApproved: await checkApproved(updatedDoctor),
       });
     }
   } catch (error) {

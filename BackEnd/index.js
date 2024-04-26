@@ -10,6 +10,7 @@ import prescriptionRoutes from "./routes/prescriptions.js"
 import patientRoutes from "./routes/patient.js"
 import radiologyCenterRoutes from "./routes/radiologyCenter.js"
 import appointmentRoutes from "./routes/appointment.js"
+import http from "http"
 const app = express()
 
 app.use(express.json())
@@ -24,6 +25,9 @@ try {
   console.log(error.message);
   process.exit(1);
 }
+
+// socket.io
+export const server = http.createServer(app);
 
 
 app.get("/", (req,res) => {

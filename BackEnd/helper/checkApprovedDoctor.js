@@ -1,7 +1,6 @@
 export const checkApproved = async (updatedDoctor) => {
   let status = "approved";
   Object.entries(updatedDoctor.toObject()).forEach(([key, value]) => {
-    console.log(key, value);
     if (key !== "reviews") { 
       if (Array.isArray(value) && value.length === 0) {
         status = "pending";
