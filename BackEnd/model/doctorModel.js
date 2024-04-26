@@ -60,10 +60,6 @@ const doctorSchema = mongoose.Schema({
   image:{
     type:String
   },
-  appointments:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Appointment'
-  }],
   createdAt:{
     type:Date,
     default:Date.now

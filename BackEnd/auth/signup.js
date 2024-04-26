@@ -46,7 +46,7 @@ export const doctorSignUp = async (req, res) => {
       })
     }
     const hashedPassword = await bcrypt.hash(doctorData.password,salt)
-    const newDoctor = await Doctor.create({
+    const newDoctor = new Doctor({
       name:doctorData.name,
       email:doctorData.email,
       nationalId:doctorData.nationalId,
@@ -68,7 +68,7 @@ export const doctorSignUp = async (req, res) => {
     await newDoctor.save();
     res.status(200).json({
       status:"success",
-      data: await  doctorTransformation(newDoctor)._doc
+      data: newDoctor
     })
   } catch (error) {
     return res.status(500).json({
