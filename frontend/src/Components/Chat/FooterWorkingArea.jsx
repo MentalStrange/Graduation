@@ -22,7 +22,7 @@ const FileInputIcon = () => {
   return (
     <>
       <Flex justifyContent="space-between" alignItems="center">
-        <Input type="text" placeholder="Message" mr={3} />
+        <Input type="text" placeholder="Message" mr={3} bg={"white"} />
         <Link>
         <IconButton bg={'transparent'}>
           <SendIcon />

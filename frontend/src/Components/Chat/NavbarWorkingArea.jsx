@@ -14,7 +14,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 function NavbarWorkingArea() {
   return (
     <>
-      <Flex direction="row" align="center" justify="space-between" mb={10}>
+      <Flex direction="row" align="center" justify="space-between"  shadow={"lg"} p={4} borderRadius={"lg"} bg={"transparent"}>
         <Flex direction="row" align="center" justify="space-between">
           <Stack direction="row">
             <Avatar>
