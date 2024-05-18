@@ -20,7 +20,7 @@ function Login() {
       <Tabs variant="soft-rounded" colorScheme="purple" width="100%">
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Stack align={"center"} flex={0.5}>
-            <Heading className="display-6">Login & SignUp </Heading>
+              <Heading className="display-6">Login & Sign Up </Heading>
             <TabList alignSelf={"center"} justifyContent={"center"}>
               <Tab>Login</Tab>
               <Tab>Sign Up</Tab>
