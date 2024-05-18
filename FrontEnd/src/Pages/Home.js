@@ -1,16 +1,16 @@
-import Navbar from './Navbar';
+import Navbar from '../Components/Home/Navbar';
 import '../styles/App.css';
-import Section1 from './Section1';
+import Section1 from '../Components/Home/Section1';
 import image1 from '../Images/image1.png';
 import image2 from '../Images/image3.png'
 import image3 from '../Images/image4.png';
 import image4 from '../Images/image5.png'
 import image5 from '../Images/image6.png'
 import image6 from '../Images/image77.png'
-import Section2 from './Section2';
-import Section3 from './Section3';
+import Section2 from '../Components/Home/Section2';
+import Section3 from '../Components/Home/Section3';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
-import Footer from './Footer';
+import Footer from '../Components/Home/Footer';
 
 function App() {
   const customButton = <button className="btn btn-lav d-block mt-4">Take the test</button>;

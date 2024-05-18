@@ -1,4 +1,4 @@
-import '../styles/App.css';
+import '../../styles/App.css';
 import Text from './text';
 
 function Section2({ image, textData }) {

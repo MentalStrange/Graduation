@@ -1,4 +1,4 @@
-import '../styles/App.css';
+import '../../styles/App.css';
 
 function Text({title, description}){
     return (

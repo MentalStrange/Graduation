@@ -1,4 +1,4 @@
-import '../styles/App.css';
+import '../../styles/App.css';
 
 function Section1({ title, subtitle, description, imageUrl, reverse }) {
     return (
