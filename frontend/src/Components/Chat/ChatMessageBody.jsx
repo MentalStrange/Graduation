@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
 import { Avatar, Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import PropTypes from 'prop-types';
 
-const ChatMessageBody = ({ contact }) => {
+const ChatMessageBody = ({ contact, onClick }) => {
   return (
-    <Link to="#">
+    <Link to="#" onClick={() => onClick(contact)}>
       <Flex _hover={{ bg: "gray.100" }} borderRadius="lg" pl={2} pt={2}>
         <Avatar src={contact.img} />
         <Box ml="3">
@@ -20,12 +20,14 @@ const ChatMessageBody = ({ contact }) => {
     </Link>
   );
 };
+
 ChatMessageBody.propTypes = {
   contact: PropTypes.shape({
     img: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ChatMessageBody;

@@ -22,7 +22,7 @@ function Navbar() {
             </li>
           </ul>
         </div>
-        <Link to="/login">
+        <Link to="/Auth">
         <button type="button" className="btn btn-outline-dark">Log In</button>
         </Link>
       </nav>
