@@ -16,14 +16,25 @@ export const patientSignUp = async (req, res) => {
         message:"Email Already Exists"
       })
     }
-    const hashedPassword = await bcrypt.hash(patientData.password,salt)
-    const newPatient = await Patient.create({
+    const hashedPassword = await bcrypt.hash(patientData.password,salt)    
+    // const newPatient = await Patient.create({
+    //   name:patientData.name,
+    //   email:patientData.email,
+    //   nationalId:patientData.nationalId,
+    //   password:hashedPassword,
+    //   ...patientData
+    // })
+    console.log(patientData);
+    const newPatient = new Patient({
+      ...patientData,
       name:patientData.name,
       email:patientData.email,
-      nationalId:patientData.nationalId,
       password:hashedPassword,
-      ...patientData
+      nationalId:patientData.nationalId,
     })
+    console.log('newPatient', newPatient);
+    
+    await newPatient.save();
     res.status(200).json({
       status:"success",
       data:patientTransformation(newPatient)

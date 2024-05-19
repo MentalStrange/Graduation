@@ -1,9 +1,10 @@
 export const patientTransformation = (patient) => {
   return{
+    // ...patient,
     name:patient.name,
     email:patient.email,
     nationalId:patient.nationalId,
-    ...patient
+    password:patient.password,
   }
 }
 export const doctorTransformation = async (doctor) => {
@@ -85,5 +86,14 @@ export const radiologyCenterAppointmentTransformation = (radiologyCenterAppointm
     userId:radiologyCenterAppointment.userId,
     type:radiologyCenterAppointment.type,
     ...radiologyCenterAppointment
+  }
+}
+
+export const userTransformation = (user) => {
+  return {
+    name:user.name,
+    email:user.email,
+    role:user.role,
+    ...user
   }
 }
