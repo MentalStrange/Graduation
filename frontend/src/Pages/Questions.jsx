@@ -1,7 +1,7 @@
 import  { useState } from 'react';
 import '../styles/App.css';
 
-function Test() {
+function Questions() {
 
     const [question, setQuestion] = useState(0)
     const questions = [
@@ -40,7 +40,7 @@ function Test() {
     );
 }
 
-export default Test;
+export default Questions;
 
 
 

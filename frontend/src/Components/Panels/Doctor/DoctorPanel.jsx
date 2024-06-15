@@ -1,6 +1,8 @@
 import { Box, Stack } from "@chakra-ui/react"
 import DoctorPanelNavbar from "./DoctorPanelNavbar"
 import DoctorPanelWorkingArea from "./DoctorPanelWorkingArea"
+import DoctorAppointments from "./Appointment/DoctorAppointments"
+import DoctorReports from "./Report/DoctorReport"
 
 function DoctorPanel() {
   return (
@@ -11,6 +13,8 @@ function DoctorPanel() {
         </Box>
         <hr style={{"padding":0,"margin":0}}/>
         <DoctorPanelWorkingArea/>
+        {/* <DoctorAppointments/> */}
+        {/* <DoctorReports/> */}
       </Stack>
     </>
   )

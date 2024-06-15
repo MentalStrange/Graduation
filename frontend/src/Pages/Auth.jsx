@@ -15,6 +15,8 @@ import image8 from "../Images/image8.png";
 import "../styles/App.css";
 import { useState } from "react";
 import axios from "axios";
+import logo from "./../assets/Images/purpleLogo.png";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 function Auth() {
@@ -79,6 +81,9 @@ function Auth() {
       <Tabs variant="soft-rounded" colorScheme="purple" width="100%">
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Stack align={"center"} flex={0.5}>
+            <Link to="/">
+              <Image src={logo} alt="logo" width={"150px"} mt={"50px"}/>
+            </Link>
             <Heading className="display-6">Login & Sign Up</Heading>
             <TabList alignSelf={"center"} justifyContent={"center"}>
               <Tab>Login</Tab>

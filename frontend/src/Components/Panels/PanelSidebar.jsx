@@ -1,4 +1,5 @@
-import { Box, VStack, Image, Link, IconButton, useColorModeValue } from "@chakra-ui/react";
+/* eslint-disable react/prop-types */
+import { Box, VStack, Image, Link, IconButton, useColorModeValue, Text } from "@chakra-ui/react";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useRole } from "../../Context/PanelSidebarContext";
@@ -19,7 +20,7 @@ function PanelSidebar({ onToggle, isOpen }) {
           color="white"
           borderRadius="md"
           _hover={{ bg: "purple.500" }}
-          width="100%" // Ensure links take the full width
+          width="100%" 
         >
           {label}
         </Link>
@@ -42,6 +43,11 @@ function PanelSidebar({ onToggle, isOpen }) {
       { to: "/panel/patient", label: "Dashboard" },
       { to: "/panel/patient/appointments", label: "Appointments" },
       { to: "/panel/patient/records", label: "Records" },
+      { to: "/panel/patient/reports", label: "Reports" },
+      { to: "/panel/patient/scans", label: "Scans" },
+      { to: "/panel/patient/prescriptions", label: "Prescriptions" },
+      { to: "/panel/patient/doctors", label: "Doctors" },
+      { to: "/panel/patient/logout", label: "Logout" },
     ],
     radiologyCenter: [
       { to: "/panel/radiologyCenter", label: "Dashboard" },
@@ -70,11 +76,22 @@ function PanelSidebar({ onToggle, isOpen }) {
         overflow="hidden" // Ensure no overflow when closed
       >
         <VStack spacing={5} align="stretch">
-          <Box display="flex" justifyContent="center" mb={8}>
+          <Box display="flex" justifyContent="center" mb={6}>
             {isOpen && <Image src={logo} alt="logo" w="150px" />}
           </Box>
           <VStack align="stretch" spacing={2}>
-            {role && isOpen && renderLinks(linksByRole[role])}
+            {role && isOpen && (
+              <>
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">ACADEMIC</Text>
+                {renderLinks(linksByRole[role].slice(0, 4))}
+                <hr style={{ width: "100%", borderColor: "white" }} />
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">ADMINISTRATIVE</Text>
+                {renderLinks(linksByRole[role].slice(4, 7))}
+                <hr style={{ width: "100%", borderColor: "white" }} />
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SETTINGS</Text>
+                {renderLinks(linksByRole[role].slice(7))}
+              </>
+            )}
           </VStack>
         </VStack>
       </Box>
@@ -85,8 +102,8 @@ function PanelSidebar({ onToggle, isOpen }) {
         icon={isOpen ? <ChevronLeftIcon sx={{color:"white"}}/> : <ChevronRightIcon sx={{ color: "purple" }} />}
         onClick={onToggle} 
         position="absolute"
-        left={isOpen ? "220px" : "0"}
-        top="0px"
+        left={isOpen ? "220px" : "0px"}
+        top="18px"
         transform={isOpen ? "translateX(-50%)" : "none"}
         transition="left 0.3s ease"
       />

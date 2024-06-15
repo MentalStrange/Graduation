@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import './../../styles/App.css';
+import { Image } from '@chakra-ui/react';
+import logo from "./../../assets/Images/purpleLogo.png";
 
 function Navbar() {
   return (
     <>
       <nav className="navbar navbar-expand-lg fixed-top navbar-light d-flex flex-row justify-content-around p-3">
-        <a className="navbar-brand" href="#">Brand</a>
+        <Link to={'/'}> <Image src={logo} alt="logo" width={"120px"}/></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
