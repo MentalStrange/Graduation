@@ -31,8 +31,14 @@ function PanelSidebar({ onToggle, isOpen }) {
   const linksByRole = {
     doctor: [
       { to: "/panel/doctor", label: "Dashboard" },
-      { to: "/panel/doctor/schedule", label: "Schedule" },
+      { to: "/panel/doctor/appointments", label: "Appointments" },
       { to: "/panel/doctor/patients", label: "Patients" },
+      { to: "/panel/doctor/reports", label: "Reports" },
+      { to: "/panel/doctor/scans", label: "Scans" },
+      { to: "/panel/doctor/prescriptions", label: "Prescriptions" },
+      { to: "/panel/doctor/settings", label: "Settings" },
+      { to: "/panel/doctor/logout", label: "Logout" },
+
     ],
     radiologist: [
       { to: "/panel/radiologist", label: "Dashboard" },
@@ -42,7 +48,6 @@ function PanelSidebar({ onToggle, isOpen }) {
     patient: [
       { to: "/panel/patient", label: "Dashboard" },
       { to: "/panel/patient/appointments", label: "Appointments" },
-      { to: "/panel/patient/records", label: "Records" },
       { to: "/panel/patient/reports", label: "Reports" },
       { to: "/panel/patient/scans", label: "Scans" },
       { to: "/panel/patient/prescriptions", label: "Prescriptions" },
@@ -51,13 +56,23 @@ function PanelSidebar({ onToggle, isOpen }) {
     ],
     radiologyCenter: [
       { to: "/panel/radiologyCenter", label: "Dashboard" },
-      { to: "/panel/radiologyCenter/staff", label: "Staff" },
-      { to: "/panel/radiologyCenter/equipment", label: "Equipment" },
+      { to: "/panel/radiologyCenter/staff", label: "Appointments" },
+      { to: "/panel/radiologyCenter/equipment", label: "Make Scan" },
+      { to: "/panel/radiologyCenter/Radiologists", label: "Radiologists" },
+      { to: "/panel/radiologyCenter/reports", label: "Reports" },
+      { to: "/panel/radiologyCenter/patients", label: "Patients" },
+      { to: "/panel/radiologyCenter/scans", label: "Scans" },
+      { to: "/panel/radiologyCenter/logout", label: "Logout" },
     ],
     receptionist: [
       { to: "/panel/receptionist", label: "Dashboard" },
-      { to: "/panel/receptionist/appointments", label: "Appointments" },
-      { to: "/panel/receptionist/patients", label: "Patients" },
+      { to: "/panel/receptionist/radiologists", label: "Radiologists" },
+      { to: "/panel/receptionist/doctors", label: "Doctors" },
+      { to: "/panel/receptionist/radiologyCenters", label: "Radiology Centers" },
+      { to: "/panel/receptionist/addNewDoctor", label: "Add New Doctor" },
+      { to: "/panel/receptionist/addNewRadiologist", label: "Add New Radiologist" },
+      { to: "/panel/receptionist/addNewRadiologyCenter", label: "Add New Radiology Center" },
+      { to: "/panel/receptionist/logout", label: "Logout" },
     ],
   };
 

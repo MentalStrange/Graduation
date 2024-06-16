@@ -2,19 +2,11 @@ import {
   Button,
   Flex,
   Heading,
-  Image,
   Input,
   Stack,
-  Checkbox,
-  Text,
-  Link,
 } from "@chakra-ui/react";
-import image8 from "../../../../Images/image8.png";
-// import "../styles/App.css";
 import { useState } from "react";
 import axios from "axios";
-import logo from "./../../../../assets/Images/purpleLogo.png";
-import { Link as RouterLink } from "react-router-dom";
 
 function AddNewRadiologist() {
   const [signupData, setSignupData] = useState({ name: "", email: "", password: "" });
@@ -41,15 +33,8 @@ function AddNewRadiologist() {
   };
 
   return (
-    <Flex justifyContent={"center"} alignItems={"center"} height={"100vh"}>
-      <Flex
-      >
-        <Stack  flex={1} justify="center" align="center">
-          <Image src={logo} alt="logo" width={"150px"} mt={"50px"} alignSelf={"center"} />
-          <Heading className="display-6">Add New Doctor</Heading>
-          <Image src={image8} alt="image" />
-        </Stack>
-        <Stack flex={1} p={8} spacing={4} justify={"center"} >
+    <Flex   height={"100vh"}>
+        <Stack flex={1} p={8} spacing={4}  >
           <form onSubmit={signupHandler}>
           <Heading as="h2" size="lg" textAlign="center">
             Add New Doctor
@@ -82,9 +67,6 @@ function AddNewRadiologist() {
                 value={signupData.password}
                 isRequired
               />
-              <Checkbox isRequired>
-                I agree to the terms and conditions
-              </Checkbox>
               <Button
                       type="submit"
                       w={"100%"}
@@ -94,19 +76,12 @@ function AddNewRadiologist() {
                       mt={4}
                       isLoading={loading}
                     >
-                      Sign Up
+                      Add 
                     </Button>
-              <Text textAlign="center">
-            Already have an account?{" "}
-            <Link as={RouterLink} to="/auth" color="purple.500">
-              Sign In
-            </Link>
-          </Text>
             </Stack>
           </form>
         </Stack>
       </Flex>
-    </Flex>
   );
 }
 

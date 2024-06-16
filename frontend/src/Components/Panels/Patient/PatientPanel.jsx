@@ -1,9 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import PatientPanelNavbar from "./PatientPanelNavbar";
-// import PatientPanelWorkingArea from "./PatientPanelWorkingArea";
-// import PatientReports from "./Report/PatientReports";
-import PatientAppointments from "./Appointments/PatientAppointments";
-import PatientPrescriptions from "./Prescriptions/PatientPrescriptions";
+import { Outlet } from "react-router-dom";
 
 function PatientPanel() {
   return (
@@ -13,10 +10,7 @@ function PatientPanel() {
       </Box>
       <hr style={{ padding: 0, margin: 0 }} />
       <Box flex="1" overflow="hidden">
-        {/* <PatientPanelWorkingArea /> */}
-        {/* <AllReports/> */}
-        {/* <PatientAppointments/> */}
-        <PatientPrescriptions/>
+        <Outlet/>
       </Box>
     </Flex>
   );

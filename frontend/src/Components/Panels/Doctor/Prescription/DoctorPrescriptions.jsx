@@ -75,7 +75,7 @@ const prescriptionsData = [
 
 const itemsPerPage = 6;
 
-function PatientPrescriptions() {
+function DoctorPrescriptions() {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -157,4 +157,4 @@ function PatientPrescriptions() {
   );
 }
 
-export default PatientPrescriptions;
+export default DoctorPrescriptions;
