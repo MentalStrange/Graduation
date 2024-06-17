@@ -1,17 +1,24 @@
+import Doctor from "../model/doctorModel.js"
+import Patient from "../model/patientModel.js"
+
 export const patientTransformation = (patient) => {
   return{
-    // ...patient,
+    id: patient._id,
     name:patient.name,
     email:patient.email,
     nationalId:patient.nationalId,
     password:patient.password,
+    image:patient.image,
   }
 }
 export const doctorTransformation = async (doctor) => {
   return{
+    id: doctor._id,
     name:doctor.name,
     email:doctor.email,
     nationalId:doctor.nationalId,
+    image:doctor.image,
+    rating:doctor.rating,
     ...doctor
   }
 }
@@ -40,13 +47,19 @@ export const radiologyCenterTransformation = (radiologyCenter) => {
   }
 }
 
-export const appointmentTransformation = (appointment) => {
+export const appointmentTransformation = async (appointment) => {
+  const doctor = await Doctor.findById(appointment.doctorId);
+  let patient = null;
+  if(appointment.type == 'patient'){
+    patient = await Patient.findById(appointment.userId);
+  }
   return {
-    doctorId:appointment.doctorId,
-    userId:appointment.userId,
+    doctor:doctor.name,
+    user:patient.name || "Guest",
     type:appointment.type,
     timeSlot:appointment.timeSlot,
     status:appointment.status,
+    date:appointment.createdAt,
     ...appointment
   }
 }

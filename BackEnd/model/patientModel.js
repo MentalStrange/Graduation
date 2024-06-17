@@ -42,6 +42,9 @@ const patientSchema = mongoose.Schema({
     type:String,
     enum:["active,inActive"]
   },
+  image:{
+    type:String
+  }
 })
 
 const Patient = mongoose.model("Patient",patientSchema)

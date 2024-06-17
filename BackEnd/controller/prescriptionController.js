@@ -105,7 +105,7 @@ export const getPrescriptionByPatient = async (req,res) => {
   try {
     const patient = await Patient.findById(patientId);
     if(patient){
-      const prescriptions = await Prescription.Find({patient:patientId})
+      const prescriptions = await Prescription.find({patient:patientId})
       if(prescriptions){
         const transformPrescriptions = prescriptions.map((prescription) => {
           return prescriptionTransformation(prescription)

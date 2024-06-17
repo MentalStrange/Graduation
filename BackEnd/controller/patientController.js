@@ -39,6 +39,8 @@ export const getPatientById = async (req,res) => {
   const patientId = req.params.id;
   try {
     const patient = await Patient.findById(patientId);
+    console.log('patient', patient);
+    
     if(patient){
       return res.status(200).json({
         status:"success",

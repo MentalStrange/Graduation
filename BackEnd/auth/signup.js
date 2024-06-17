@@ -61,8 +61,8 @@ export const doctorSignUp = async (req, res) => {
       name:doctorData.name,
       email:doctorData.email,
       nationalId:doctorData.nationalId,
-      password:hashedPassword,
-      ...doctorData
+      ...doctorData,
+      password:hashedPassword
     })
     let status = "approved";
     Object.entries(newDoctor.toObject()).forEach(([key, value]) => {

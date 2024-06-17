@@ -43,9 +43,9 @@ export const getAllDoctor = async (req, res) => {
   try {
     const doctors = await Doctor.find();
     if (doctors) {
-      const transformDoctor = doctors.map((doctor) => {
-        return doctorTransformation(doctor);
-      });
+      const transformDoctor = await Promise.all(doctors.map(async (doctor) => {
+        return doctorTransformation(doctor)
+      }))
       return res.status(200).json({
         status: "success",
         data: transformDoctor,

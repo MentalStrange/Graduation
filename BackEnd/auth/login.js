@@ -10,16 +10,24 @@ import Receptionist from "../model/receptionistModel.js";
 import bcrypt from "bcrypt";
 
 const getUserByEmail = async (email) => {
-  const user =
-    (await Doctor.findOne({ email })) ||
-    (await Patient.findOne({ email })) ||
-    (await Radiologist.findOne({ email })) ||
-    (await RadiologyCenter.findOne({ email })) ||
-    (await Receptionist.findOne({ email }));
+  let user = await Doctor.findOne({ email });
+  if (user) return { ...user.toObject(), role: 'doctor' };
 
-  return user;
+  user = await Patient.findOne({ email });
+  if (user) return { ...user.toObject(), role: 'patient' };
+
+  user = await Radiologist.findOne({ email });
+  if (user) return { ...user.toObject(), role: 'radiologist' };
+
+  user = await RadiologyCenter.findOne({ email });
+  if (user) return { ...user.toObject(), role: 'radiologyCenter' };
+
+  user = await Receptionist.findOne({ email });
+  if (user) return { ...user.toObject(), role: 'receptionist' };
+
+  return null;
 };
-console.log(getUserByEmail);
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -30,20 +38,15 @@ export const login = async (req, res) => {
         .json({ success: false, message: "User Not Found" });
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    console.log('user.password', user.password);
-    
-    console.log('isPassword Match', await bcrypt.compare(password,user.password));
-
-    
     if (!isPasswordMatch) {
       return res
         .status(400)
         .json({ success: false, message: "Password Not Correct" });
     }
     const token = generateToken({ id: user._id, role: user.role });
-    const { password: userPassword, ...userData } = user.toObject();
+    const { password: userPassword, ...userData } = user;
     res.status(200).json({
-      status:"success",
+      status: "success",
       data: userTransformation(userData),
       token,
     });

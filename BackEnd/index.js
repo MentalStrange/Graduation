@@ -10,6 +10,7 @@ import prescriptionRoutes from "./routes/prescriptions.js";
 import patientRoutes from "./routes/patient.js";
 import radiologyCenterRoutes from "./routes/radiologyCenter.js";
 import appointmentRoutes from "./routes/appointment.js";
+import scanRoutes from "./routes/scan.js";
 import http from "http";
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use('/api/v1/prescription', prescriptionRoutes);
 app.use('/api/v1/patient', patientRoutes);
 app.use('/api/v1/radiologyCenter', radiologyCenterRoutes);
 app.use('/api/v1/appointment', appointmentRoutes);
+app.use('/api/v1/scan',scanRoutes)
 
 
 server.listen(PORT, () => {

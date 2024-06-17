@@ -1,6 +1,7 @@
 import { appointmentTransformation } from "../format/transformation.js";
 import Appointment from "../model/appointmentModel.js";
 import Doctor from "../model/doctorModel.js"
+import Patient from "../model/patientModel.js";
 
 export const getAppointmentsByDoctorId = async (req,res)=>{
   const doctorId = req.params.id;
@@ -46,6 +47,8 @@ export const getAppointmentById = async (req,res) => {
 }
 export const getAppointmentsByPatientId = async (req,res) => {
   const patientId = req.params.id;
+  console.log('patientId', patientId);
+  
   try {
     const patient = await Patient.findById(patientId);
     if(!patient){
@@ -56,20 +59,30 @@ export const getAppointmentsByPatientId = async (req,res) => {
     }
     const appointments = await Appointment.find({userId:patientId});
     if(appointments.length > 0){
-      const transformAppointments = appointments.map((appointment) => {
+      const transformAppointments = await Promise.all(appointments.map(async (appointment) => {
         return appointmentTransformation(appointment)
-      })
+      }))
       res.status(200).json({
         status:"success",
         data:transformAppointments
       })
+    }else{
+      return res.status(404).json({
+        status:"fail",
+        message:"No Appointments Found"
+      })
     }
   }catch(error){
-    
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
   }
 }
 export const createAppointmentForPatient = async (req,res) => {
   const appointmentData = req.body;
+  console.log('appointmentData', appointmentData);
+  
   try {
     const doctor = await Doctor.findById(appointmentData.doctorId);
     if(!doctor){
@@ -78,7 +91,7 @@ export const createAppointmentForPatient = async (req,res) => {
         message:"Doctor Not Found"
       })
     }
-    const patient = await Patient.findById(appointmentData.patientId);
+    const patient = await Patient.findById(appointmentData.userId);
     if(!patient){
       return res.status(404).json({
         status:"fail",
