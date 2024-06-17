@@ -37,7 +37,7 @@ function PanelSidebar({ onToggle, isOpen }) {
       { to: "/panel/doctor/scans", label: "Scans" },
       { to: "/panel/doctor/prescriptions", label: "Prescriptions" },
       { to: "/panel/doctor/settings", label: "Settings" },
-      { to: "/panel/doctor/logout", label: "Logout" },
+      { to: "/logout", label: "Logout" },
 
     ],
     radiologist: [
@@ -52,17 +52,16 @@ function PanelSidebar({ onToggle, isOpen }) {
       { to: "/panel/patient/scans", label: "Scans" },
       { to: "/panel/patient/prescriptions", label: "Prescriptions" },
       { to: "/panel/patient/doctors", label: "Doctors" },
-      { to: "/panel/patient/logout", label: "Logout" },
+      { to: "/logout", label: "Logout" },
     ],
     radiologyCenter: [
       { to: "/panel/radiologyCenter", label: "Dashboard" },
-      { to: "/panel/radiologyCenter/staff", label: "Appointments" },
-      { to: "/panel/radiologyCenter/equipment", label: "Make Scan" },
+      { to: "/panel/radiologyCenter/appointments", label: "Appointments" },
+      { to: "/panel/radiologyCenter/makeScan", label: "Make Scan" },
       { to: "/panel/radiologyCenter/Radiologists", label: "Radiologists" },
       { to: "/panel/radiologyCenter/reports", label: "Reports" },
-      { to: "/panel/radiologyCenter/patients", label: "Patients" },
       { to: "/panel/radiologyCenter/scans", label: "Scans" },
-      { to: "/panel/radiologyCenter/logout", label: "Logout" },
+      { to: "/logout", label: "Logout" },
     ],
     receptionist: [
       { to: "/panel/receptionist", label: "Dashboard" },
@@ -72,7 +71,7 @@ function PanelSidebar({ onToggle, isOpen }) {
       { to: "/panel/receptionist/addNewDoctor", label: "Add New Doctor" },
       { to: "/panel/receptionist/addNewRadiologist", label: "Add New Radiologist" },
       { to: "/panel/receptionist/addNewRadiologyCenter", label: "Add New Radiology Center" },
-      { to: "/panel/receptionist/logout", label: "Logout" },
+      { to: "/logout", label: "Logout" },
     ],
   };
 

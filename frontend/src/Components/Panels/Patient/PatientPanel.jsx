@@ -3,6 +3,7 @@ import PatientPanelNavbar from "./PatientPanelNavbar";
 import { Outlet } from "react-router-dom";
 
 function PatientPanel() {
+
   return (
     <Flex direction="column" height="100vh">
       <Box m={4}>
@@ -10,7 +11,7 @@ function PatientPanel() {
       </Box>
       <hr style={{ padding: 0, margin: 0 }} />
       <Box flex="1" overflow="hidden">
-        <Outlet/>
+        <Outlet />
       </Box>
     </Flex>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // src/contexts/RoleContext.jsx
 import  { createContext, useState, useContext } from 'react';
 
@@ -13,4 +14,5 @@ export const RoleProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useRole = () => useContext(RoleContext);

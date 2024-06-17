@@ -1,22 +1,8 @@
-import { useState } from 'react';
-import { Box, Flex, Heading, Text, Badge, SimpleGrid, Button, VStack, Grid } from '@chakra-ui/react';
-
+import { useState, useContext } from 'react';
+import { Box, Flex, Heading, Text, Badge, SimpleGrid, Button, VStack, Grid, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const reports = [
-  { type: 'MRI Report', doctor: 'Mohamed Ramadan', dueDate: 'February 10, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Ahmed Mohamed', dueDate: 'March 5, 2024', status: 'Completed' },
-  { type: 'X-ray', doctor: 'Amany Mohamed', dueDate: 'April 15, 2024', status: 'In Progress' },
-  { type: 'MRI Report', doctor: 'Enas Mohamed', dueDate: 'April 8, 2024', status: 'Not Started' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-];
+import { ReportsContext } from '../../../../Context/PatientContext/ReportsContext';
 
 const statusColorScheme = {
   'Not Submitted': 'red',
@@ -27,6 +13,7 @@ const statusColorScheme = {
 
 function PatientReports() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const { reports, loading, error } = useContext(ReportsContext);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -39,6 +26,19 @@ function PatientReports() {
     console.log('Fetching reports for date:', date);
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
   return (
     <Box p="4" height="85vh" overflowY="auto">
       <Grid templateColumns={{ base: '1fr', lg: '3fr 1fr' }} gap="4">
@@ -48,7 +48,7 @@ function PatientReports() {
             <Button variant="link" colorScheme="blue">View all</Button>
           </Flex>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
-            {reports.map((report, index) => (
+            {reports.data.map((report, index) => (
               <Box key={index} p="4" borderWidth="1px" borderRadius="lg">
                 <Flex justify="space-between" align="center" mb="2">
                   <Heading size="md">{report.type}</Heading>
@@ -72,6 +72,13 @@ function PatientReports() {
           </VStack>
         </Box>
       </Grid>
+      <Flex justify="center" align="center" mt={7}>
+        <Button size="sm" mr={2}>Previous</Button>
+        <Button size="sm" mr={2}>1</Button>
+        <Button size="sm" mr={2}>2</Button>
+        <Button size="sm" mr={2}>3</Button>
+        <Button size="sm">Next</Button>
+      </Flex>
     </Box>
   );
 }

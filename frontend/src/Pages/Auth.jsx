@@ -10,21 +10,22 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useToast,
 } from "@chakra-ui/react";
 import image8 from "../Images/image8.png";
 import "../styles/App.css";
 import { useState } from "react";
 import axios from "axios";
 import logo from "./../assets/Images/purpleLogo.png";
-import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function Auth() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({ name: "", email: "", password: "", nationalId: "" });
   const [loading, setLoading] = useState(false);
-
-  // const Navigate = useNavigate();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   // Change handlers
   const changeLoginHandler = (e) => {
@@ -51,15 +52,50 @@ function Auth() {
         config
       );
       setLoading(false);
-      localStorage.setItem('userData', JSON.stringify(response.data));
-      console.log("Login successful:", response.data);
-      // Navigate("/");
+      localStorage.setItem('userToken', response.data.token);
+      const decodedToken = jwtDecode(response.data.token);
+      const userRole = decodedToken.role;
+  
+      toast({
+        title: "Login successful.",
+        description: "You have successfully logged in.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+  
+      // Redirect based on role
+      switch (userRole) {
+        case "doctor":
+          navigate("/panel/doctor");
+          break;
+        case "patient":
+          navigate("/panel/patient");
+          break;
+        case "receptionist":
+          navigate("/panel/receptionist");
+          break;
+        case "radiologist":
+          navigate("/panel/radiologist");
+          break;
+        case "radiologyCenter":
+          navigate("/panel/radiologyCenter");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (error) {
       setLoading(false);
-      console.error("Login error:", error.response ? error.response.data : error.message);
+      toast({
+        title: "Login error.",
+        description: error.response && error.response.data ? error.response.data.message : error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
-
+  
   const signupHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,10 +105,23 @@ function Auth() {
         signupData
       );
       setLoading(false);
-      console.log("Signup successful:", response.data);
+      navigate("/auth");
+      toast({
+        title: "Signup successful.",
+        description: "You have successfully signed up.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (error) {
       setLoading(false);
-      console.error("Signup error:", error.response ? error.response.data : error.message);
+      toast({
+        title: "Signup error.",
+        description: error.response && error.response.data ? error.response.data.message : error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -157,43 +206,43 @@ function Auth() {
                       name="email"
                       onChange={changeSignupHandler}
                       value={signupData.email}
-                    ></Input>
-                    <Input
-                      type="password"
-                      className="form-control form-control-sm m-2 p-2"
-                      placeholder="Password"
-                      name="password"
-                      onChange={changeSignupHandler}
-                      value={signupData.password}
-                    ></Input>
-                    <Input
-                      type="text"
-                      className="form-control form-control-sm m-2 p-2"
-                      placeholder="National ID"
-                      name="nationalId"
-                      onChange={changeSignupHandler}
-                      value={signupData.nationalId}
-                    ></Input>
-                    <Button
-                      type="submit"
-                      w={"100%"}
-                      backgroundColor={"#9747FF"}
-                      color={"white"}
-                      _hover={{ backgroundColor: "#AC6BFF" }}
-                      mt={4}
-                      isLoading={loading}
-                    >
-                      Sign Up
-                    </Button>
-                  </div>
-                </form>
-              </TabPanel>
-            </TabPanels>
-          </Stack>
-        </Flex>
-      </Tabs>
-    </Flex>
-  );
-}
-
-export default Auth;
+                      ></Input>
+                      <Input
+                        type="password"
+                        className="form-control form-control-sm m-2 p-2"
+                        placeholder="Password"
+                        name="password"
+                        onChange={changeSignupHandler}
+                        value={signupData.password}
+                      ></Input>
+                      <Input
+                        type="text"
+                        className="form-control form-control-sm m-2 p-2"
+                        placeholder="National ID"
+                        name="nationalId"
+                        onChange={changeSignupHandler}
+                        value={signupData.nationalId}
+                      ></Input>
+                      <Button
+                        type="submit"
+                        w={"100%"}
+                        backgroundColor={"#9747FF"}
+                        color={"white"}
+                        _hover={{ backgroundColor: "#AC6BFF" }}
+                        mt={4}
+                        isLoading={loading}
+                      >
+                        Sign Up
+                      </Button>
+                    </div>
+                  </form>
+                </TabPanel>
+              </TabPanels>
+            </Stack>
+          </Flex>
+        </Tabs>
+      </Flex>
+    );
+  }
+  
+  export default Auth;

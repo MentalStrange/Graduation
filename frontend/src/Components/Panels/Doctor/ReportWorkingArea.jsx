@@ -1,6 +1,7 @@
-import { Box, Flex, Icon, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon,  Stack, Text } from "@chakra-ui/react";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import { Link } from "react-router-dom";
 
 const reportsData = [
   {
@@ -53,9 +54,11 @@ function ReportWorkingArea() {
               <Icon mr={1} as={ContentPasteSearchIcon} />
               <Text m={0}>Reports</Text>
             </Flex>
-        <Link href="#" color="blue.500">
-          View All <Icon as={ArrowForwardIcon} />
-        </Link>
+            <Text color="blue.500" m={0}>
+              <Link to={"reports"} >
+                View All <Icon as={ArrowForwardIcon} />
+              </Link>
+            </Text>
       </Flex>
       <Stack spacing={4}>
         {reportsData.map((report, index) => (

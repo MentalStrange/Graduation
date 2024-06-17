@@ -1,30 +1,45 @@
-import { Box, Button, Flex, Heading, IconButton, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, IconButton, Table, Thead, Tbody, Tr, Th, Td, Spinner, Alert, AlertIcon, useDisclosure } from '@chakra-ui/react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon  from '@mui/icons-material/Visibility';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
-const appointments = [
-  { firstName: 'Jane', lastName: 'Cooper', phoneNumber: '+91 9876543210', dateTime: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-  { firstName: 'Wade', lastName: 'Warren', phoneNumber: '+91 9876543210', dateTime: '13-Aug-2023 at 10:00 AM', status: 'Booked' },
-  { firstName: 'Brooklyn', lastName: 'Simmons', phoneNumber: '+91 9876543210', dateTime: '13-Aug-2023 at 10:00 AM', status: 'Completed' },
-  { firstName: 'Cameron', lastName: 'Williamson', phoneNumber: '+91 9876543210', dateTime: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-  // Add more appointment objects here...
-];
+import { useContext } from 'react';
+import AddAppointment from './AddAppointment';
+import { AppointmentsContext } from '../../../../Context/PatientContext/AppointmentContext';
 
 function PatientAppointments() {
+  const { appointments, loading, error, setAppointments } = useContext(AppointmentsContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleAppointmentAdded = (newAppointment) => {
+    setAppointments((prevAppointments) => [...prevAppointments, newAppointment]);
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
   return (
     <Box p={4}>
       <Flex justify="space-between" align="center" mb={4}>
         <Heading as="h1" size="lg">Manage Appointments</Heading>
-        <Button colorScheme="purple" leftIcon={<ArrowForwardIcon />}>
+        <Button colorScheme="purple" leftIcon={<ArrowForwardIcon />} onClick={onOpen}>
           Add Appointment
         </Button>
       </Flex>
       <Table variant="striped" colorScheme="gray">
         <Thead>
           <Tr>
-            <Th>First Name</Th>
-            <Th>Last Name</Th>
+            <Th>Dr.Name</Th>
+            <Th>Specialization</Th>
             <Th>Phone Number</Th>
             <Th>Appointment Date & Time</Th>
             <Th>Status</Th>
@@ -32,12 +47,12 @@ function PatientAppointments() {
           </Tr>
         </Thead>
         <Tbody>
-          {appointments.map((appointment, index) => (
+          {appointments.data.map((appointment, index) => (
             <Tr key={index}>
-              <Td>{appointment.firstName}</Td>
-              <Td>{appointment.lastName}</Td>
-              <Td>{appointment.phoneNumber}</Td>
-              <Td>{appointment.dateTime}</Td>
+              <Td>{appointment.doctor}</Td>
+              <Td>{appointment.user}</Td>
+              <Td>{appointment.date}</Td>
+              <Td>{appointment.timeSlot}</Td>
               <Td>
                 <Button size="sm" colorScheme={appointment.status === 'Completed' ? 'red' : 'green'} variant="outline">
                   {appointment.status}
@@ -65,6 +80,7 @@ function PatientAppointments() {
         <Button size="sm" mr={2}>3</Button>
         <Button size="sm">Next</Button>
       </Flex>
+      <AddAppointment isOpen={isOpen} onClose={onClose} onAppointmentAdded={handleAppointmentAdded} />
     </Box>
   );
 }

@@ -1,23 +1,27 @@
-import { Box, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Badge } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { Box, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Badge, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { DoctorAppointmentsContext } from '../../../../Context/DoctorContext/DoctorAppointmentsContext';
 
 function DoctorAppointments() {
-  const appointments = [
-    { firstName: 'Jane', lastName: 'Cooper', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Wade', lastName: 'Warren', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Booked' },
-    { firstName: 'Brooklyn', lastName: 'Simmons', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Completed' },
-    { firstName: 'Cameron', lastName: 'Williamson', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Leslie', lastName: 'Alexander', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Savannah', lastName: 'Nguyen', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Darlene', lastName: 'Robertson', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Completed' },
-    { firstName: 'Ronald', lastName: 'Richards', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Kathryn', lastName: 'Murphy', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-    { firstName: 'Darrell', lastName: 'Steward', phone: '+91 9876543210', date: '13-Aug-2023 at 10:00 AM', status: 'Open' },
-  ];
+  const { appointments, loading, error } = useContext(DoctorAppointmentsContext);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
 
   return (
     <Flex height="85vh" overflowY="auto">
-      <Box flex="1" p="4" >
+      <Box flex="1" p="4">
         <Heading mb="4">Manage Appointments</Heading>
         <TableContainer>
           <Table variant="striped" colorScheme="gray">

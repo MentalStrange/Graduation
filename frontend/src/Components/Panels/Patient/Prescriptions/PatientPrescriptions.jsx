@@ -1,81 +1,13 @@
-import  { useState } from 'react';
-import { Box, Flex, Heading, Text, SimpleGrid, Button, VStack, Grid } from '@chakra-ui/react';
+import { useState, useContext } from 'react';
+import { Box, Flex, Heading, Text, SimpleGrid, Button, VStack, Grid, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const prescriptionsData = [
-  {
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },
-  {
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },
-];
+import { PrescriptionsContext } from '../../../../Context/PatientContext/PrescriptionsContext';
 
 const itemsPerPage = 6;
 
 function PatientPrescriptions() {
+  const { prescriptions, loading, error } = useContext(PrescriptionsContext);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -89,16 +21,29 @@ function PatientPrescriptions() {
     console.log('Fetching prescriptions for date:', date);
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
   const offset = currentPage * itemsPerPage;
-  const currentItems = prescriptionsData.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(prescriptionsData.length / itemsPerPage);
+  const currentItems = prescriptions.data.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(prescriptions.length / itemsPerPage);
 
   return (
     <Box p="4" height="85vh" overflowY="auto">
       <Grid templateColumns={{ base: '1fr', lg: '3fr 1fr' }} gap="4">
         <Box>
           <Flex justify="space-between" align="center" mb="4">
-            <Heading size="lg">Welcome, Patient</Heading>
+            <Heading size="lg">Prescriptions</Heading>
             <Button variant="link" colorScheme="blue">View all</Button>
           </Flex>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
