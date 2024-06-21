@@ -3,6 +3,7 @@ import { reportTransformation } from "../format/transformation.js";
 import Radiologist from "../model/radiologistModel.js";
 import Doctor from "../model/doctorModel.js";
 import Patient from "../model/patientModel.js";
+import Scan from "../model/scanModel.js";
 
 export const getAllReports = async (req,res) => {
   try {
@@ -43,28 +44,25 @@ export const getReportById = async (req,res) => {
 export const createReport = async (req,res) => {
   const report = req.body;
   try {
-    const patient = await Patient.findById(report.patient);
+    const patient = await Patient.findById(report.patientId);
     if(!patient){
       return res.status(404).json({
         status:"fail",
         message:"Patient Not Found"
       })
     }
-    const doctor = await Doctor.findById(report.doctor);
-    if(!doctor){
-      return res.status(404).json({
-        status:"fail",
-        message:"Doctor Not Found"
-      })
-    }
-    const radiologist = await Radiologist.findById(report.radiologist);
+    const radiologist = await Radiologist.findById(report.radiologistId);
     if(!radiologist){
       return res.status(404).json({
         status:"fail",
-        message:"Radiologist Not Found"
+        message:"radiologist Not Found"
       })
     }
-    const newReport = await Report.create(report);
+    const newReport = await Report.create({
+      ...report,
+      patient:patient._id,
+      radiologist:radiologist._id
+    });
     if(newReport){
       return res.status(200).json({
         status:"success",
@@ -82,9 +80,7 @@ export const getReportByPatient = async (req,res) => {
   const patientId = req.params.id;
   try {
     const reports = await Report.find({patient:patientId});
-    const transformReports = reports.map((report) => {
-      return reportTransformation(report)
-    })
+    const transformReports = await Promise.all(reports.map(report => reportTransformation(report)));
     if(reports){
       return res.status(200).json({
         status:"success",

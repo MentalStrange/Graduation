@@ -18,7 +18,19 @@ const prescriptionSchema = mongoose.Schema({
   },
   examination:{
     type:String,
-  }
+  },
+  drugs:[
+    {
+      type:String,
+    }
+  ],
+  scans:[
+    {
+      type:String
+    }
+  ]
+},{
+  timestamps:true
 })
 
 const Prescription = mongoose.model("Prescription",prescriptionSchema)

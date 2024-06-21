@@ -3,24 +3,35 @@ import { Flex, Icon, Stack, Text, Box } from "@chakra-ui/react";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { formatDate } from "../../../../Utils/formatDate";
+
+const bgColors = [
+  "purple.100",
+  "orange.100",
+  "green.100",
+  "blue.100"
+];
 
 function AppointmentsWorkingArea({ data }) {
+  // Randomize the background color for each appointment
+  const randomBgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+
   return (
-    <Box p={4} bg={data.bgColor} borderRadius="md" boxShadow="md">
+    <Box p={4} bg={randomBgColor} borderRadius="md" boxShadow="md">
       <Stack>
-        <Text fontWeight="bold" m={0} textAlign={"center"}>{data.name}</Text>
-        <hr style={{"padding":2,"margin":2}}/>
+        <Text fontWeight="bold" m={0} textAlign={"center"}>{data.user}</Text>
+        <hr style={{ padding: 2, margin: 2 }} />
         <Flex align={"center"}>
           <Icon mr={1} as={CalendarMonthIcon} />
-          <Text m={0}>{data.title}</Text>
+          <Text m={0}>{data.timeSlot}</Text>
         </Flex>
         <Flex align={"center"}>
           <Icon mr={1} as={AccessAlarmIcon} />
-          <Text m={0}>{data.time}</Text>
+          <Text m={0}>{formatDate(data.date)}</Text>
         </Flex>
         <Flex align={"center"}>
           <Icon mr={1} as={LocationOnIcon} />
-          <Text m={0}><a href={data.address} target="_blank" rel="noopener noreferrer">Location</a></Text>
+          <Text m={0}>{data.phone}</Text>
         </Flex>
       </Stack>
     </Box>

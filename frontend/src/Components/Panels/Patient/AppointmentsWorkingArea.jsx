@@ -2,11 +2,10 @@ import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Flex, Icon, Box, Text,
 import { Link } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import { useContext } from 'react';
-import { AppointmentsContext } from "../../../Context/PatientContext/AppointmentContext";
+import { usePatientState } from "../../../Context/PatientContext/PatientContext";
 
 function AppointmentsWorkingArea() {
-  const { appointments, loading, error } = useContext(AppointmentsContext);
+  const { appointments, loading, error } = usePatientState();
 
   if (loading) {
     return <Spinner />;
@@ -21,6 +20,8 @@ function AppointmentsWorkingArea() {
     );
   }
 
+  // Ensure appointments.data exists and is an array
+  const appointmentsData = appointments.data.data|| [];
   return (
     <Box mt={8}>
       <Flex align={"center"} justify={"space-between"} mb={2}>
@@ -37,7 +38,7 @@ function AppointmentsWorkingArea() {
         <Table variant="striped" colorScheme="gray">
           <Thead position="sticky" top={0} bgColor="gray.100" zIndex={1}>
             <Tr>
-              <Th>Patient Name</Th>
+              <Th>Doctor Name</Th>
               <Th>Specialization</Th>
               <Th>Date</Th>
               <Th>Time</Th>
@@ -45,10 +46,10 @@ function AppointmentsWorkingArea() {
             </Tr>
           </Thead>
           <Tbody>
-            {appointments.data.map((appointment, index) => (
+            {appointmentsData.map((appointment, index) => (
               <Tr key={index}>
                 <Td>{appointment.doctor}</Td>
-                <Td>{appointment.Specialization}</Td>
+                <Td>{appointment.specialization}</Td>
                 <Td>{appointment.date}</Td>
                 <Td>{appointment.timeSlot}</Td>
                 <Td>{appointment.status}</Td>

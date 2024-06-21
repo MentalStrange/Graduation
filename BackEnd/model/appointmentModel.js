@@ -8,7 +8,7 @@ const appointmentSchema = mongoose.Schema({
   },
   userId:{
     type:mongoose.Schema.Types.ObjectId,
-    required:[true,"Patient Should Have an Id"]
+    // required:[true,"Patient Should Have an Id"]
   },
   createdAt:{
     type:Date,

@@ -1,5 +1,0 @@
-Here's you Should work.
-
-Make Branch for your self and push on it and didn't open any folder for FrontEnd, OR BackEnd.
-
-Good Luck..

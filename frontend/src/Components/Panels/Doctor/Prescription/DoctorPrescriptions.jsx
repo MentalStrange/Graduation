@@ -1,117 +1,85 @@
-import  { useState } from 'react';
-import { Box, Flex, Heading, Text, SimpleGrid, Button, VStack, Grid } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Flex, Heading, Text, SimpleGrid, Button, VStack, Grid, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const prescriptionsData = [
-  {
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },
-  {
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },{
-    doctor: "Dr. Ahmed Mohamed",
-    dueDate: "February 10, 2024",
-    drugs: ["Drug 1: lorem lorem lorem lorem", "Drug 2: lorem lorem lorem lorem", "Drug 3: lorem lorem lorem lorem"],
-    scans: ["Scan 1: MRI on Brain", "Scan 2: CT on Brain"]
-  },
-];
+import useFetch from '../../../../Hooks/useFetch';
+import { decodeToken } from '../../../../../Utils/JWT_Decode';
 
 const itemsPerPage = 6;
 
 function DoctorPrescriptions() {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const token = localStorage.getItem('userToken');
+  const doctorId = decodeToken(token).id;
+  console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhh",doctorId);
+  const { data, loading, error } = useFetch(`http://localhost:5001/api/v1/prescription/doctor/${doctorId}?date=${selectedDate.toISOString()}`);
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // Implement the logic to fetch prescriptions by date if needed
-    console.log('Fetching prescriptions for date:', date);
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentItems = prescriptionsData.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(prescriptionsData.length / itemsPerPage);
+  const currentItems = data && data.data ? data.data.slice(offset, offset + itemsPerPage) : [];
+  const pageCount = data && data.data ? Math.ceil(data.data.length / itemsPerPage) : 0;
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
+  if (!data || !data.data) {
+    return (
+      <Alert status="info">
+        <AlertIcon />
+        No prescriptions available.
+      </Alert>
+    );
+  }
 
   return (
     <Box p="4" height="85vh" overflowY="auto">
       <Grid templateColumns={{ base: '1fr', lg: '3fr 1fr' }} gap="4">
         <Box>
           <Flex justify="space-between" align="center" mb="4">
-            <Heading size="lg">Welcome, Patient</Heading>
-            <Button variant="link" colorScheme="blue">View all</Button>
+            <Heading size="lg">Prescriptions</Heading>
           </Flex>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
             {currentItems.map((prescription, index) => (
-              <Box key={index} p="4" borderWidth="1px" borderRadius="lg">
-                <Text fontSize="xl">{prescription.doctor}</Text>
-                <Text>Due Date: {prescription.dueDate}</Text>
-                {prescription.drugs.map((drug, i) => (
-                  <Text key={i}>{drug}</Text>
-                ))}
-                {prescription.scans.map((scan, i) => (
-                  <Text key={i}>{scan}</Text>
-                ))}
+              <Box key={index} p="4" borderWidth="1px" borderRadius="lg" boxShadow="md">
+                <Text fontSize="xl">Doctor: {prescription.doctor}</Text>
+                <Text>Due Date: {formatDate(prescription.date)}</Text>
+                <Text>Patient: {prescription.patient}</Text>
+                <Text>Description: {prescription.description}</Text>
+                <Text>Examination: {prescription.examination}</Text>
+                <Text>Drugs:</Text>
+                <ul>
+                  {prescription.drugs.length > 0 ? prescription.drugs.map((drug, i) => (
+                    <li key={i}>{drug}</li>
+                  )) : <li>No drugs prescribed</li>}
+                </ul>
+                <Text>Scans:</Text>
+                <ul>
+                  {prescription.scans.length > 0 ? prescription.scans.map((scan, i) => (
+                    <li key={i}>{scan}</li>
+                  )) : <li>No scans prescribed</li>}
+                </ul>
               </Box>
             ))}
           </SimpleGrid>

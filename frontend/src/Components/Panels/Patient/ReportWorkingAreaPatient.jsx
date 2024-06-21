@@ -2,11 +2,21 @@ import { Box, Flex, Icon, Stack, Text, Spinner, Alert, AlertIcon } from "@chakra
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import { Link } from "react-router-dom";
-import { useContext } from 'react';
-import { ReportsContext } from '../../../Context/PatientContext/ReportsContext';
+import { usePatientState } from '../../../Context/PatientContext/PatientContext'; // Use the combined PatientContext
+import { formatDate } from "../../../../Utils/formatDate";
 
 function ReportWorkingAreaPatient() {
-  const { reports, loading, error } = useContext(ReportsContext);
+  const borderColor = [
+    "orange.200",
+    "green.200",
+    "red.200",
+    "blue.200",
+    "purple.200",
+    "pink.200",
+    "yellow.200",
+    "cyan.200",
+  ]
+  const { reports, loading, error } = usePatientState();
 
   if (loading) {
     return <Spinner />;
@@ -20,6 +30,9 @@ function ReportWorkingAreaPatient() {
       </Alert>
     );
   }
+
+  // Ensure reports.data exists and is an array
+  const reportsData = reports && Array.isArray(reports.data.data) ? reports.data.data : [];
 
   return (
     <Box mt={8} maxHeight="calc(100vh - 200px)" overflowY="auto">
@@ -35,25 +48,26 @@ function ReportWorkingAreaPatient() {
         </Text>
       </Flex>
       <Stack spacing={4}>
-        {reports.data.map((report, index) => (
-          <Box
-            key={index}
-            p={4}
-            borderWidth="1px"
-            borderRadius="md"
-            borderColor={report.borderColor}
-            color="white"
-          >
-            <Flex justifyContent="space-between" alignItems="center" mb={2}>
-              <Text fontWeight="bold" color={'black'}>{report.type}</Text>
-              <Text fontSize="sm" color={report.statusColor}>
-                {report.status}
-              </Text>
-            </Flex>
-            <Text color={'black'}>Patient Name: {report.patientName}</Text>
-            <Text color={'black'}>Due Date: {report.dueDate}</Text>
-          </Box>
-        ))}
+        {reportsData.length > 0 ? (
+          reportsData.map((report, index) => (
+            <Box
+              key={index}
+              p={4}
+              borderWidth="1px"
+              borderRadius="md"
+              borderColor={borderColor[index]}
+              color="white"
+            >
+              <Flex justifyContent="space-between" alignItems="center" mb={2}>
+                <Text fontWeight="bold" color={'black'}>{report.radiologist}</Text>
+              </Flex>
+              <Text color={'black'}>Patient Name: {report.patient}</Text>
+              <Text color={'black'}>Due Date: {formatDate(report.date)}</Text>
+            </Box>
+          ))
+        ) : (
+          <Text>No reports found</Text>
+        )}
       </Stack>
     </Box>
   );

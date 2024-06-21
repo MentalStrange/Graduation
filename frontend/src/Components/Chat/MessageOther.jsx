@@ -1,29 +1,29 @@
-import PropTypes from 'prop-types';
-import { Avatar, Flex, Stack, Text } from '@chakra-ui/react';
+/* eslint-disable react/prop-types */
+import { Avatar, Flex, Stack, Text, Image } from '@chakra-ui/react';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { formatDate } from '../../../Utils/formatDate';
 
-function MessageOther({ content, timestamp }) {
+function MessageOther({ content, timestamp, type, onLoad, avatarImage }) {
   return (
-    <Flex align={"center"}>
-      <Avatar mr={2} />
-      <Stack bg={"#38A169"} width={"fit-content"} px={6} py={1} mb={2} borderRadius={7}>
-        <Text m={0} color={"white"}>
-          {content}
-        </Text>
-        <Flex justify={"flex-end"}>
-          <Text m={0} color={"white"}>
-            {timestamp}
+    <Flex align={"flex-start"} mb={4}>
+      <Avatar size="md" src={avatarImage} />
+      <Stack spacing={1} bg={type === "image" ? "transparent" : "#38A169"} width={"auto"} px={4} py={3} borderRadius={"lg"} minWidth={'170px'} maxWidth={'300px'}>
+        {type === "image" ? (
+          <Image src={content} alt="Received image" borderRadius="md" maxWidth="200px" onLoad={onLoad} />
+        ) : (
+          <Text color={"white"} fontSize={"md"} m={0}>
+            {content}
           </Text>
-          <DoneAllIcon sx={{ color: "white", ml: 1 }} />
+        )}
+        <Flex justify={"space-between"} align="center">
+          <Text color={"white"} fontSize={"xs"} m={0} opacity={0.7}>
+            {formatDate(timestamp)}
+          </Text>
+          <DoneAllIcon sx={{ color: "white", ml: 1, fontSize: "16px" }} />
         </Flex>
       </Stack>
     </Flex>
   );
 }
-
-MessageOther.propTypes = {
-  content: PropTypes.string.isRequired,
-  timestamp: PropTypes.string.isRequired,
-};
 
 export default MessageOther;

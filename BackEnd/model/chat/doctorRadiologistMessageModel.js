@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const doctorRadiologistMessageSchema = mongoose.Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Radiologist",
+    ref: "radiologist",
     required: true,
   },
   receiver: {

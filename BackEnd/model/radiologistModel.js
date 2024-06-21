@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 const radiologistSchema = mongoose.Schema({
   name:{
     type:String,
-    require:[true,"Radiologist Should Have a Name"]
+    require:[true,"radiologist Should Have a Name"]
   },
   email:{
     type:String,
-    require:[true,"Radiologist Should Have a Email"]
+    require:[true,"radiologist Should Have a Email"]
   },
   nationalId:{
     type:Number,
@@ -16,7 +16,7 @@ const radiologistSchema = mongoose.Schema({
   },
   password:{
     type:String,
-    require:[true,"Radiologist Should Have a Password"]
+    require:[true,"radiologist Should Have a Password"]
   },
   gender:{
     type:String,
@@ -43,6 +43,12 @@ const radiologistSchema = mongoose.Schema({
   createdAt:{
     type:Date,
     default:Date.now()
+  },
+  startHour:{
+    type:String
+  },
+  endHour:{
+    type:String
   }
 },{
   timeSlots:true

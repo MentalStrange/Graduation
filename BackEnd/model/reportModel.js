@@ -3,15 +3,13 @@ import mongoose from "mongoose"
 const reportSchema = mongoose.Schema({
   patient:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Patient"
-  },
-  doctor:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Doctor"
+    ref:"Patient",
+    required:[true,"Patient is required"]
   },
   radiologist:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Radiologist"
+    ref:"radiologist",
+    required:[true,"Radiologist is required"]
   },
   createdAt:{
     type:Date,

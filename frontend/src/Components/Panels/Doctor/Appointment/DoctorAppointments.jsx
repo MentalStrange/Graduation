@@ -1,10 +1,114 @@
-import { useContext } from 'react';
-import { Box, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Badge, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { DoctorAppointmentsContext } from '../../../../Context/DoctorContext/DoctorAppointmentsContext';
+import {  useState } from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+  Alert,
+  AlertIcon,
+  IconButton,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Modal,
+  useToast,
+} from "@chakra-ui/react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useDoctorState } from "../../../../Context/DoctorContext/DoctorContext"; // Use the combined DoctorContext
+import api from "../../../../Api/Api";
 
 function DoctorAppointments() {
-  const { appointments, loading, error } = useContext(DoctorAppointmentsContext);
+  const { appointments, loading, error } = useDoctorState();
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isAcceptModalOpen, setAcceptModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const toast = useToast();
+
+  const handleDeleteClick = (appointment) => {
+    setSelectedAppointment(appointment);
+    setDeleteModalOpen(true);
+  };
+
+  const handleAcceptClick = (appointment) => {
+    setSelectedAppointment(appointment);
+    setAcceptModalOpen(true);
+  };
+
+  const updateAppointmentStatus = async (appointmentId, status) => {
+    try {
+      const response = await api.patch(`/appointment/status`, {
+        appointmentId,
+        status
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Failed to update the appointment status');
+      }
+      return { success: true };
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+      return { success: false, error: error.message };
+    }
+  };
+  const handleUpdateStatus = async (status) => {
+    try {
+      const result = await updateAppointmentStatus(
+        selectedAppointment.id,
+        status
+      );
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: `Appointment status updated to ${status}`,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          "Failed to update the appointment status. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleDeleteConfirm = () => {
+    handleUpdateStatus("cancelled");
+    setDeleteModalOpen(false);
+  };
+
+  const handleAcceptConfirm = () => {
+    handleUpdateStatus("completed");
+    setAcceptModalOpen(false);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const closeAcceptModal = () => {
+    setAcceptModalOpen(false);
+  };
 
   if (loading) {
     return <Spinner />;
@@ -19,6 +123,9 @@ function DoctorAppointments() {
     );
   }
 
+  // Access the nested data array
+  const appointmentsData = appointments.data.data;
+
   return (
     <Flex height="85vh" overflowY="auto">
       <Box flex="1" p="4">
@@ -27,8 +134,7 @@ function DoctorAppointments() {
           <Table variant="striped" colorScheme="gray">
             <Thead>
               <Tr>
-                <Th>First Name</Th>
-                <Th>Last Name</Th>
+                <Th>Patient Name</Th>
                 <Th>Phone Number</Th>
                 <Th>Appointment Date & Time</Th>
                 <Th>Status</Th>
@@ -36,35 +142,108 @@ function DoctorAppointments() {
               </Tr>
             </Thead>
             <Tbody>
-              {appointments.map((appointment, index) => (
-                <Tr key={index}>
-                  <Td>{appointment.firstName}</Td>
-                  <Td>{appointment.lastName}</Td>
-                  <Td>{appointment.phone}</Td>
-                  <Td>{appointment.date}</Td>
-                  <Td>
-                    <Badge colorScheme={appointment.status === 'Open' ? 'green' : appointment.status === 'Booked' ? 'orange' : 'red'}>
-                      {appointment.status}
-                    </Badge>
-                  </Td>
-                  <Td>
-                    <Button colorScheme="blue" size="sm" mr="2">Pay Now</Button>
-                    <Button colorScheme="green" size="sm" mr="2">Accept</Button>
-                    <Button colorScheme="red" size="sm" mr="2">🗑️</Button>
-                    <Button colorScheme="gray" size="sm">👁️</Button>
-                  </Td>
+              {Array.isArray(appointmentsData) && appointmentsData.length > 0 ? (
+                appointmentsData.map((appointment, index) => (
+                  <Tr key={index}>
+                    <Td>{appointment.user}</Td>
+                    <Td>{appointment.phone}</Td>
+                    <Td>{appointment.date}</Td>
+                    <Td>
+                      <Button
+                        size="sm"
+                        colorScheme={
+                          appointment.status === "completed" ? "green" : "red"
+                        }
+                        variant="outline"
+                      >
+                        {appointment.status}
+                      </Button>
+                    </Td>
+                    <Td>
+                      <Button
+                        colorScheme="green"
+                        size="sm"
+                        mr="2"
+                        onClick={() => handleAcceptClick(appointment)}
+                      >
+                        Accept
+                      </Button>
+                      <IconButton
+                        aria-label="Delete"
+                        icon={<DeleteIcon />}
+                        size="sm"
+                        colorScheme="red"
+                        mr={2}
+                        onClick={() => handleDeleteClick(appointment)}
+                      />
+                      <IconButton
+                        aria-label="View"
+                        icon={<VisibilityIcon />}
+                        size="sm"
+                        colorScheme="blackAlpha"
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              ) : (
+                <Tr>
+                  <Td colSpan="5" textAlign="center">No Appointments Available</Td>
                 </Tr>
-              ))}
+              )}
             </Tbody>
           </Table>
         </TableContainer>
-        <Flex justify="center" mt="4">
-          <Button variant="outline" mr="2">Previous</Button>
-          <Button colorScheme="blue" mr="2">1</Button>
-          <Button variant="outline" mr="2">2</Button>
-          <Button variant="outline" mr="2">3</Button>
-          <Button variant="outline">Next</Button>
+        <Flex justify="center" align="center" mt={4}>
+          <Button size="sm" mr={2}>
+            Previous
+          </Button>
+          <Button size="sm" mr={2}>
+            1
+          </Button>
+          <Button size="sm" mr={2}>
+            2
+          </Button>
+          <Button size="sm" mr={2}>
+            3
+          </Button>
+          <Button size="sm">Next</Button>
         </Flex>
+        <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm Deletion</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              Are you sure you want to cancel this appointment?
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="red" mr={3} onClick={handleDeleteConfirm}>
+                Yes, Cancel it
+              </Button>
+              <Button variant="ghost" onClick={closeDeleteModal}>
+                No
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Modal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm Acceptance</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              Are you sure you want to mark this appointment as completed?
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="green" mr={3} onClick={handleAcceptConfirm}>
+                Yes, Mark as Completed
+              </Button>
+              <Button variant="ghost" onClick={closeAcceptModal}>
+                No
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </Flex>
   );

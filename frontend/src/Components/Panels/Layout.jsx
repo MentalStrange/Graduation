@@ -21,6 +21,13 @@ const Layout = () => {
     } else if (location.pathname.includes('/panel/receptionist')) {
       setRole('receptionist');
     }
+
+    // Check if the path includes 'chat' and set the sidebar state accordingly
+    if (location.pathname.includes('/chat')) {
+      setIsSidebarOpen(false); // Close the sidebar if the path includes 'chat'
+    } else {
+      setIsSidebarOpen(true); // Otherwise, open the sidebar
+    }
   }, [location.pathname, setRole]);
 
   const handleToggleSidebar = () => {
@@ -30,9 +37,9 @@ const Layout = () => {
   return (
     <Flex className="app-container">
       <PanelSidebar isOpen={isSidebarOpen} onToggle={handleToggleSidebar} />
-      <Box flex={1} transition="margin-left 0.3s ease">
+      <Box flex={1}transition="margin-left 0.3s ease">
         <main className="content-area">
-          <Outlet />
+          <Outlet context={{ isSidebarOpen }} />
         </main>
       </Box>
     </Flex>

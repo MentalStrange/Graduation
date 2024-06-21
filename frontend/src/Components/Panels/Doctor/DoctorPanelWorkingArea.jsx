@@ -1,70 +1,65 @@
-import { Flex, Heading, Icon, Link, Stack, Text, SimpleGrid, Box } from "@chakra-ui/react";
+import { Flex, Heading, Icon, Stack, Text, SimpleGrid, Box, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import HistoryIcon from "@mui/icons-material/History";
 import AppointmentsWorkingArea from "./AppointmentsWorkingArea";
 import DoctorPanelPatientBoard from "./DoctorPanelPatientBoard";
-import ReportWorkingArea from "./ReportWorkingArea";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
-const data = [
-  {
-    name: "Dr. John Doe",
-    title: "Cardiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "purple.100"
-  },
-  {
-    name: "Dr. Jane Smith",
-    title: "Surgeon",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "orange.100"
-  },
-  {
-    name: "Dr. Alice Brown",
-    title: "Radiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "green.100"
-  },
-  {
-    name: "Dr. Bob Johnson",
-    title: "Radiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "blue.100"
-  },
-];
+import { useDoctorState } from "../../../Context/DoctorContext/DoctorContext"; // Use the combined DoctorContext
+import PrescriptionWorkingArea from "./PrescriptionWorkingArea";
+import { Link } from "react-router-dom";
 
 function DoctorPanelWorkingArea() {
+  const { appointments, doctor, loading, error } = useDoctorState();
+  
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
+  // Access the nested data array
+  const appointmentsData = appointments?.data?.data || [];
+  const doctorData = doctor?.data?.data || {};
+
   return (
     <Flex mx={4} flexDirection={{ base: "column", lg: "row" }} gap={4}>
       {/* Left Side - Appointments and Patients Board */}
       <Box flex="3">
         <Stack>
-          <Heading m={0}>Welcome Dr. {"Ahmed"}</Heading>
+          <Heading m={0}>Welcome Dr. {doctorData.name || 'N/A'}</Heading>
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"}>
               <Icon mr={1} as={HistoryIcon} />
               <Text m={0}>Appointments</Text>
             </Flex>
-            <Link href="#" color="blue.500">
-          View All <Icon as={ArrowForwardIcon} />
-        </Link>
+            <Text color={"blue.500"}>  
+            <Link to="appointments" color="blue.500">
+              View All <Icon as={ArrowForwardIcon} />
+            </Link>
+            </Text>
           </Flex>
-          {/* <hr /> */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={4}>
-            {data.map((item, index) => (
-              <AppointmentsWorkingArea key={index} data={item} />
-            ))}
+            {appointmentsData.length > 0 ? (
+              appointmentsData.slice(0, 4).map((item, index) => (
+                <AppointmentsWorkingArea key={index} data={item} />
+              ))
+            ) : (
+              <Text>No Appointments Available</Text>
+            )}
           </SimpleGrid>
           <DoctorPanelPatientBoard />
         </Stack>
       </Box>
 
-      {/* Right Side - Reports */}
+      {/* Right Side - Prescriptions */}
       <Box flex="1">
-        <ReportWorkingArea />
+        <PrescriptionWorkingArea />
       </Box>
     </Flex>
   );

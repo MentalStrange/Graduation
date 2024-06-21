@@ -1,5 +1,11 @@
 import Doctor from "../model/doctorModel.js"
 import Patient from "../model/patientModel.js"
+import Prescription from "../model/prescriptionModel.js"
+import RadiologyCenter from "../model/radiologyCenterModel.js"
+import Appointment from "../model/appointmentModel.js"
+import Report from "../model/reportModel.js"
+import Scan from "../model/scanModel.js"
+import Radiologist from "../model/radiologistModel.js"
 
 export const patientTransformation = (patient) => {
   return{
@@ -9,6 +15,10 @@ export const patientTransformation = (patient) => {
     nationalId:patient.nationalId,
     password:patient.password,
     image:patient.image,
+    phone:patient.phone,
+    address:patient.address,
+    age:patient.age,
+    gender:patient.gender,
   }
 }
 export const doctorTransformation = async (doctor) => {
@@ -19,7 +29,11 @@ export const doctorTransformation = async (doctor) => {
     nationalId:doctor.nationalId,
     image:doctor.image,
     rating:doctor.rating,
-    ...doctor
+    specialization:doctor.specialization,
+    phone:doctor.phone,
+    gender:doctor.gender,
+    timeSlots:doctor.timeSlots,
+    address:doctor.address
   }
 }
 export const receptionistTransformation = (receptionist) => {
@@ -29,24 +43,35 @@ export const receptionistTransformation = (receptionist) => {
     ...receptionist
   }
 }
-export const radiologistTransformation = (radiologist) => {
+export const radiologistTransformation = async (radiologist) => {
+  const numberOfFinishedScans = await Scan.countDocuments({ radiologistId: radiologist._id });
   return{
+    id: radiologist._id,
     name:radiologist.name,
     email:radiologist.email,
     nationalId:radiologist.nationalId,
-    ...radiologist
+    gender: radiologist.gender,
+    phone: radiologist.phone,
+    address: radiologist.address,
+    age: radiologist.age,
+    specialization: radiologist.specialization,
+    experience: radiologist.experience,
+    image: radiologist.image,
+    createdAt: radiologist.createdAt,
+    numberOfFinishedScans: numberOfFinishedScans,
+    startHour: radiologist.startHour,
+    endHour: radiologist.endHour
   }
 }
-
 export const radiologyCenterTransformation = (radiologyCenter) => {
   return{
+    id: radiologyCenter._id,
     name:radiologyCenter.name,
     email:radiologyCenter.email,
     nationalId:radiologyCenter.nationalId,
     ...radiologyCenter
   }
 }
-
 export const appointmentTransformation = async (appointment) => {
   const doctor = await Doctor.findById(appointment.doctorId);
   let patient = null;
@@ -54,54 +79,86 @@ export const appointmentTransformation = async (appointment) => {
     patient = await Patient.findById(appointment.userId);
   }
   return {
+    id:appointment._id,
     doctor:doctor.name,
-    user:patient.name || "Guest",
+    userId:appointment.userId ?? null,
+    user:patient.name ?? "Guest",
     type:appointment.type,
     timeSlot:appointment.timeSlot,
     status:appointment.status,
     date:appointment.createdAt,
-    ...appointment
+    phone:doctor.phone,
+    specialization:doctor.specialization,
+    gender:doctor.gender,
+    address:doctor.address,
+    phone:doctor.phone,
+    // ...appointment
   }
 }
-export const prescriptionTransformation = (prescription) => {
+export const prescriptionTransformation = async (prescription) => {
+  const doctor = await Doctor.findById(prescription.doctor);
+  const patient = await Patient.findById(prescription.patient);
   return {
-    doctorId:prescription.doctorId,
-    userId:prescription.userId,
-    type:prescription.type,
+    doctor:doctor.name,
+    patient:patient.name,
+    description:prescription.description,
     timeSlot:prescription.timeSlot,
-    status:prescription.status,
-    ...prescription
+    drugs:prescription.drugs?? [],
+    scans:prescription.scans?? [],
+    examination:prescription.examination,
+    date:prescription.date,
   }
 } 
-export const reportTransformation = (report) => {
+export const reportTransformation = async (report) => {
+  const radiologist = await Radiologist.findById(report.radiologist)
+  const patient = await Patient.findById(report.patient)
   return {
-    doctorId:report.doctorId,
-    userId:report.userId,
+    id:report._id,
+    radiologist:radiologist.name??"N/E",
+    patient:patient.name??"N/E",
     type:report.type,
     timeSlot:report.timeSlot,
     status:report.status,
-    ...report
+    description:report.description,
+    date:report.createdAt,
+    examination:report.examination,
+    note:report.note
   }
 }
-export const scanTransformation = (scan) => {
+export const scanTransformation = async (scan) => {
+  let patient;
+  const radiologist = await Radiologist.findById(scan.radiologistId)
+  if(scan.userId){
+    patient = await Patient.findById(scan.userId)
+  }
   return {
-    doctorId:scan.doctorId,
-    userId:scan.userId,
+    id:scan._id,
+    radiologistId:scan.radiologistId,
+    radiologist:radiologist.name,
+    patientId:scan.userId,
+    patient:patient.name ?? "Guest",
     type:scan.type,
-    timeSlot:scan.timeSlot,
+    date:scan.createdAt,
     status:scan.status,
-    ...scan
+    image:scan.image,
   }
 }
-export const radiologyCenterAppointmentTransformation = (radiologyCenterAppointment) => {
+export const radiologyCenterAppointmentTransformation = async (radiologyCenterAppointment) => {
+  let patient ;
+  const radiologyCenter = await RadiologyCenter.findById(radiologyCenterAppointment.radiologyCenterId)
+  if(radiologyCenterAppointment.userId){
+    patient = await Patient.findById(radiologyCenterAppointment.userId)
+  }
   return {
-    radiologyCenterId:radiologyCenterAppointment.radiologyCenterId,
-    userId:radiologyCenterAppointment.userId,
-    type:radiologyCenterAppointment.type,
-    ...radiologyCenterAppointment
+    id:radiologyCenterAppointment._id,
+    centerName:radiologyCenter.name,
+    patient:patient.name ?? "Guest",
+    status:radiologyCenterAppointment.status,
+    timeSlot:radiologyCenterAppointment.timeSlot,
+    phone:radiologyCenter.phone,
+    // ...radiologyCenterAppointment
   }
 }
-
 export const userTransformation = (user) => {
   return {
     name:user.name,
@@ -109,4 +166,25 @@ export const userTransformation = (user) => {
     role:user.role,
     ...user
   }
+}
+export const patientDetails = async (patientId) => {
+  const prescriptions = await Prescription.find({patient:patientId})
+  const transformPrescription = await Promise.all(prescriptions.map(async (prescription) => await prescriptionTransformation(prescription)))
+  const appointments = await Appointment.find({userId:patientId})
+  const transformAppointment = await Promise.all(appointments.map(async (appointment) => await appointmentTransformation(appointment)))
+  const reports = await Report.find({userId:patientId})
+  const transformReport = await Promise.all(reports.map(async (report) => await reportTransformation(report)))
+  const scans = await Scan.find({userId:patientId})
+  const transformScan = await Promise.all(scans.map(async (scan) => await scanTransformation(scan)))
+  const patient = await Patient.findById(patientId)
+  const transformPatient = await patientTransformation(patient)
+  return(
+    {
+      patient:transformPatient,
+      prescriptions:transformPrescription,
+      appointments:transformAppointment,
+      reports:transformReport,
+      scans:transformScan
+    }
+  )
 }

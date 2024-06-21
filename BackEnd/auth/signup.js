@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { doctorTransformation, patientTransformation, receptionistTransformation } from "../format/transformation.js";
+import { doctorTransformation, patientTransformation, radiologistTransformation, receptionistTransformation } from "../format/transformation.js";
 import Patient from "../model/patientModel.js";
 import Doctor from "../model/doctorModel.js";
 import Radiologist from "../model/radiologistModel.js";
@@ -24,7 +24,6 @@ export const patientSignUp = async (req, res) => {
     //   password:hashedPassword,
     //   ...patientData
     // })
-    console.log(patientData);
     const newPatient = new Patient({
       ...patientData,
       name:patientData.name,
@@ -100,11 +99,11 @@ export const radiologistSignUp = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(radiologistData.password,salt)
     const newRadiologist = await Radiologist.create({
+      ...radiologistData,
       name:radiologistData.name,
       email:radiologistData.email,
       nationalId:radiologistData.nationalId,
       password:hashedPassword,
-      ...radiologistData
     })
     res.status(200).json({
       status:"success",
@@ -129,10 +128,10 @@ export const radiologyCenterSignUp = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(radiologyCenterData.password,salt)
     const newRadiologyCenter = await RadiologyCenter.create({
+      ...radiologyCenterData,
       name:radiologyCenterData.name,
       email:radiologyCenterData.email,
       password:hashedPassword,
-      ...radiologyCenterData
     })
     res.status(200).json({
       status:"success",
@@ -157,10 +156,10 @@ export const receptionistSignUp = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(receptionistData.password,salt)
     const newReceptionist = await Receptionist.create({
+      ...receptionistData,
       name:receptionistData.name,
       email:receptionistData.email,
       password:hashedPassword,
-      ...receptionistData
     })
     res.status(200).json({
       status:"success",

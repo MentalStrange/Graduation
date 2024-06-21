@@ -4,33 +4,22 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AppointmentsWorkingArea from "./AppointmentsWorkingArea";
 import DoctorCard from "./DoctorCard";
 import { Link } from "react-router-dom";
-import { useContext } from 'react';
-import { DoctorsContext } from "../../../Context/PatientContext/DoctorsContext";
-import { PatientContext } from "../../../Context/PatientContext/PatientContext";
 import ReportWorkingAreaPatient from "./ReportWorkingAreaPatient";
+import { usePatientState } from "../../../Context/PatientContext/PatientContext";
+
 
 function PatientPanelWorkingArea() {
-  const { doctors, loading: doctorsLoading, error: doctorsError } = useContext(DoctorsContext);
-  const { patient, loading: patientLoading, error: patientError } = useContext(PatientContext);
-
-  if (doctorsLoading || patientLoading) {
+  const { doctors, patient, loading, error } = usePatientState();
+  console.log(doctors,"doctors");
+  if (loading) {
     return <Spinner />;
   }
 
-  if (doctorsError) {
+  if (error) {
     return (
       <Alert status="error">
         <AlertIcon />
-        {doctorsError.message}
-      </Alert>
-    );
-  }
-
-  if (patientError) {
-    return (
-      <Alert status="error">
-        <AlertIcon />
-        {patientError.message}
+        {error.message}
       </Alert>
     );
   }
@@ -42,7 +31,7 @@ function PatientPanelWorkingArea() {
         {/* Left Side - Appointments and Patients Board */}
         <Box flex="3">
           <Stack>
-            <Heading m={0}>Welcome {patient.data.name}</Heading>
+            <Heading m={0}>Welcome {patient?.data?.data?.name || "Patient"}</Heading>
             <Flex align={"center"} justify={"space-between"}>
               <Flex align={"center"}>
                 <Icon mr={1} as={HistoryIcon} />
@@ -55,9 +44,16 @@ function PatientPanelWorkingArea() {
               </Text>
             </Flex>
             <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={4}>
-              {doctors.data.map((doctor) => (
-                <DoctorCard key={doctor.id} {...doctor} />
-              ))}
+              {Array.isArray(doctors.data.data) && doctors.data.data.length > 0 ? (
+                doctors.data.data.map((doctor) => (
+                  <DoctorCard key={doctor.id} {...doctor} />
+                ))
+              ) : (
+                <Alert status="info" borderRadius="md" width="100%">
+                  <AlertIcon />
+                  No Doctors Available
+                </Alert>
+              )}
             </SimpleGrid>
             <AppointmentsWorkingArea />
           </Stack>

@@ -1,6 +1,6 @@
 import express from "express";
 import { deleteRadiologyCenter, getAllRadiologyCenter, getRadiologyCenterById, updateRadiologyCenter } from "../controller/radiologyCenterController.js";
-import { createAppointmentForPatientRadiologyCenter, deleteRadiologyCenterAppointment, getRadiologyCenterAppointment, getRadiologyCenterAppointmentById, getRadiologyCenterAppointmentsForPatient, updateRadiologyCenterAppointment } from "../controller/radiologyCenterAppointmentController.js";
+import { createAppointmentForPatientRadiologyCenter, deleteRadiologyCenterAppointment, getAvailableTimeSlots, getRadiologyCenterAppointment, getRadiologyCenterAppointmentById, getRadiologyCenterAppointmentsForPatient, updateAppointmentStatus, updateRadiologyCenterAppointment } from "../controller/radiologyCenterAppointmentController.js";
 
 const Router = express.Router();
 
@@ -13,6 +13,8 @@ Router.get('/appointment',getRadiologyCenterAppointment)
 Router.get('/appointment/:id',getRadiologyCenterAppointmentById)
 Router.get('/appointment/patient/:id',getRadiologyCenterAppointmentsForPatient)
 Router.post('/appointment',createAppointmentForPatientRadiologyCenter);
+Router.patch('/appointment/status',updateAppointmentStatus);
+Router.get('/appointment/availableTimeSlots/:id',getAvailableTimeSlots);
 Router.patch('/appointment/:id',updateRadiologyCenterAppointment);
 Router.delete('/appointment/:id',deleteRadiologyCenterAppointment)
 

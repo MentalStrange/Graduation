@@ -1,13 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Box, Flex, Heading, Text, SimpleGrid, Button, VStack, Grid, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { PrescriptionsContext } from '../../../../Context/PatientContext/PrescriptionsContext';
+import { usePatientState } from '../../../../Context/PatientContext/PatientContext';
 
 const itemsPerPage = 6;
 
 function PatientPrescriptions() {
-  const { prescriptions, loading, error } = useContext(PrescriptionsContext);
+  const { prescriptions, loading, error } = usePatientState();
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -17,9 +17,18 @@ function PatientPrescriptions() {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // Implement the logic to fetch prescriptions by date if needed
-    console.log('Fetching prescriptions for date:', date);
   };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  const currentItems = prescriptions?.data?.data?.slice(offset, offset + itemsPerPage) || [];
+  const pageCount = prescriptions && prescriptions.data && Array.isArray(prescriptions.data.data) 
+    ? Math.ceil(prescriptions.data.data.length / itemsPerPage) 
+    : 0;
 
   if (loading) {
     return <Spinner />;
@@ -34,9 +43,14 @@ function PatientPrescriptions() {
     );
   }
 
-  const offset = currentPage * itemsPerPage;
-  const currentItems = prescriptions.data.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(prescriptions.length / itemsPerPage);
+  if (!prescriptions || !prescriptions.data || !Array.isArray(prescriptions.data.data)) {
+    return (
+      <Alert status="info">
+        <AlertIcon />
+        No prescriptions available.
+      </Alert>
+    );
+  }
 
   return (
     <Box p="4" height="85vh" overflowY="auto">
@@ -44,19 +58,27 @@ function PatientPrescriptions() {
         <Box>
           <Flex justify="space-between" align="center" mb="4">
             <Heading size="lg">Prescriptions</Heading>
-            <Button variant="link" colorScheme="blue">View all</Button>
           </Flex>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
             {currentItems.map((prescription, index) => (
-              <Box key={index} p="4" borderWidth="1px" borderRadius="lg">
-                <Text fontSize="xl">{prescription.doctor}</Text>
-                <Text>Due Date: {prescription.dueDate}</Text>
-                {prescription.drugs.map((drug, i) => (
-                  <Text key={i}>{drug}</Text>
-                ))}
-                {prescription.scans.map((scan, i) => (
-                  <Text key={i}>{scan}</Text>
-                ))}
+              <Box key={index} p="4" borderWidth="1px" borderRadius="lg" boxShadow="md">
+                <Text fontSize="xl">Doctor: {prescription.doctor}</Text>
+                <Text>Due Date: {formatDate(prescription.date)}</Text>
+                <Text>Patient: {prescription.patient}</Text>
+                <Text>Description: {prescription.description}</Text>
+                <Text>Examination: {prescription.examination}</Text>
+                <Text>Drugs:</Text>
+                <ul>
+                  {prescription.drugs?.length > 0 ? prescription.drugs.map((drug, i) => (
+                    <li key={i}>{drug}</li>
+                  )) : <li>No drugs prescribed</li>}
+                </ul>
+                <Text>Scans:</Text>
+                <ul>
+                  {prescription.scans?.length > 0 ? prescription.scans.map((scan, i) => (
+                    <li key={i}>{scan}</li>
+                  )) : <li>No scans prescribed</li>}
+                </ul>
               </Box>
             ))}
           </SimpleGrid>

@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useContext } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -19,11 +18,10 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 import StarIcon from '@mui/icons-material/Star';
-import { DoctorsContext } from '../../../../Context/PatientContext/DoctorsContext';
+import { usePatientState } from '../../../../Context/PatientContext/PatientContext';
 
 function PatientDoctorDetails({ isOpen, onClose, doctorId }) {
-  const { doctors, loading, error } = useContext(DoctorsContext);
-  const doctor = doctors.data.find((doc) => doc.id === doctorId);
+  const { doctors, loading, error } = usePatientState();
 
   if (loading) {
     return <Spinner />;
@@ -37,6 +35,12 @@ function PatientDoctorDetails({ isOpen, onClose, doctorId }) {
       </Alert>
     );
   }
+
+  // Ensure doctors.data.data is defined and an array
+  const doctorsData = doctors.data && doctors.data.data ? doctors.data.data : [];
+
+  // Find the doctor by ID
+  const doctor = doctorsData.find((doc) => doc.id === doctorId);
 
   if (!doctor) {
     return null;
@@ -67,10 +71,10 @@ function PatientDoctorDetails({ isOpen, onClose, doctorId }) {
           </Box>
         </ModalBody>
         <ModalFooter justifyContent="center" gap={5}>
-          <Button colorScheme="blue" onClick={() => {/* Handle booking logic here */}}>
+          <Button onClick={onClose}>Close</Button>
+          <Button colorScheme="purple" onClick={() => {/* Handle booking logic here */}}>
             Book Appointment
           </Button>
-          <Button onClick={onClose}>Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

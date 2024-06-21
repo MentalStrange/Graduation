@@ -8,7 +8,6 @@ const radiologyCenterAppointmentSchema = mongoose.Schema({
   },
   userId:{
     type:mongoose.Schema.Types.ObjectId,
-    required:[true,"User Should Have an Id"]
   },
   createdAt:{
     type:Date,
@@ -18,10 +17,17 @@ const radiologyCenterAppointmentSchema = mongoose.Schema({
     type:String,
     enum:["guest","patient"],
     default:"guest" 
+  },
+  timeSlot:{
+    type: String,
+    required: [true, "Time slot is required"]
+  },
+  status:{
+    type:String,
+    enum:["pending", "selected", "confirmed","cancelled"],
+    default:"pending"
   }
-},{
-  timeSlots:true
 })
 
-const RadiologyCenterAppointment = mongoose.model('RadiologyCenterAppointment',radiologyCenterAppointmentSchema)
+const RadiologyCenterAppointment = mongoose.model('RadiologyCenterAppointment', radiologyCenterAppointmentSchema);
 export default RadiologyCenterAppointment

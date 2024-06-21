@@ -1,11 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { SimpleGrid, Spinner, Alert, AlertIcon, Box, Heading, useDisclosure } from '@chakra-ui/react';
-import { DoctorsContext } from '../../../../Context/PatientContext/DoctorsContext';
+import { usePatientState } from '../../../../Context/PatientContext/PatientContext';
 import PatientDoctorDetails from './PatientDoctorDetails';
 import DoctorCard from '../DoctorCard';
 
 function PatientDoctors() {
-  const { doctors, loading, error } = useContext(DoctorsContext);
+  const { doctors, loading, error } = usePatientState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
 
@@ -27,18 +27,20 @@ function PatientDoctors() {
     );
   }
 
+  // Ensure doctors.data is an array
+  const doctorsData = Array.isArray(doctors.data.data) ? doctors.data.data : [];
+
   return (
     <Box p={4}>
       <Heading as="h1" size="lg" mb={4}>Available Doctors</Heading>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
-        {doctors.data.map((doctor) => (
+        {doctorsData.map((doctor) => (
           <Box key={doctor.id} onClick={() => handleDoctorClick(doctor.id)} cursor={"pointer"}>
             <DoctorCard
               name={doctor.name}
               image={doctor.image}
               rating={doctor.rating}
               specialization={doctor.specialization}
-              
             />
           </Box>
         ))}

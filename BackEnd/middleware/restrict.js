@@ -1,6 +1,6 @@
 import Doctor from "../model/doctorModel.js";
 import Patient from "../model/patientModel.js";
-import Radiologist from '../model/radiologistModel.js';
+import radiologist from '../model/radiologistModel.js';
 import RadiologyCenter from '../model/radiologyCenterModel.js'
 import Admin from '../model/adminModel.js'
 
@@ -14,7 +14,7 @@ export const restrict = (roles) => async (req,res,next)  => {
     }else if(req.role == 'doctor'){
       user = await Doctor.findById(userId)
     }else if(req.role == 'radiologist'){
-      user = await Radiologist.findById(userId);
+      user = await radiologist.findById(userId);
     }else if(req.role == 'radiologyCenter'){
       user = await RadiologyCenter.findById(userId);
     }else if(req.role == 'admin'){

@@ -8,8 +8,8 @@ const scanSchema = mongoose.Schema({
   },
   radiologistId:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Radiologist",
-    required:[true,"Radiologist Should Have an Id"]
+    ref:"radiologist",
+    required:[true,"radiologist Should Have an Id"]
   },
   userId:{
     type:mongoose.Schema.Types.ObjectId,
@@ -28,6 +28,17 @@ const scanSchema = mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"Report"
   },
+  image:
+    {
+      type:String,
+      required:[true,"Image is required"]
+    }
+  ,
+  status:{
+    type:String,
+    enum:["reported","notReported"],
+    default:"notReported"
+  }
 
 })
 

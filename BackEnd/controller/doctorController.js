@@ -65,7 +65,7 @@ export const getDoctorById = async (req, res) => {
     if (doctor) {
       return res.status(200).json({
         status: "success",
-        data: doctorTransformation(doctor),
+        data: await doctorTransformation(doctor),
       });
     }
   } catch (error) {

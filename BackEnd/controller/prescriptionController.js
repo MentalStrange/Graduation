@@ -107,9 +107,9 @@ export const getPrescriptionByPatient = async (req,res) => {
     if(patient){
       const prescriptions = await Prescription.find({patient:patientId})
       if(prescriptions){
-        const transformPrescriptions = prescriptions.map((prescription) => {
+        const transformPrescriptions = await Promise.all(prescriptions.map(async (prescription) => {
           return prescriptionTransformation(prescription)
-        })
+        }))
         return res.status(200).json({
           status:"success",
           data:transformPrescriptions
@@ -133,14 +133,14 @@ export const getPrescriptionByDoctor = async (req,res) => {
   try {
     const doctor = await Doctor.findById(doctorId);
     if(doctor){
-      const prescriptions = await Prescription.Find({doctor:doctorId})
+      const prescriptions = await Prescription.find({doctor:doctorId})
       if(prescriptions){
-        const transformPrescriptions = prescriptions.map((prescription) => {
+        const transformPrescriptions = await Promise.all(prescriptions.map(async (prescription) => {
           return prescriptionTransformation(prescription)
-        })
+        }))
         return res.status(200).json({
           status:"success",
-          data:transformPrescriptions
+          data: transformPrescriptions
         })
       }
     }else{

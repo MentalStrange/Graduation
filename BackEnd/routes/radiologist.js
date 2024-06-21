@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllRadiologist, getRadiologistById, updateRadiologist } from "../controller/radiologiestController.js";
+import { getAllRadiologist, getRadiologistById, updateRadiologist } from "../controller/radiologistController.js";
 
 const Router = express.Router();
 
