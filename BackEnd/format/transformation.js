@@ -151,6 +151,7 @@ export const radiologyCenterAppointmentTransformation = async (radiologyCenterAp
   }
   return {
     id:radiologyCenterAppointment._id,
+    date:radiologyCenterAppointment.createdAt,
     centerName:radiologyCenter.name,
     patient:patient.name ?? "Guest",
     status:radiologyCenterAppointment.status,
@@ -172,7 +173,7 @@ export const patientDetails = async (patientId) => {
   const transformPrescription = await Promise.all(prescriptions.map(async (prescription) => await prescriptionTransformation(prescription)))
   const appointments = await Appointment.find({userId:patientId})
   const transformAppointment = await Promise.all(appointments.map(async (appointment) => await appointmentTransformation(appointment)))
-  const reports = await Report.find({userId:patientId})
+  const reports = await Report.find({patient:patientId})
   const transformReport = await Promise.all(reports.map(async (report) => await reportTransformation(report)))
   const scans = await Scan.find({userId:patientId})
   const transformScan = await Promise.all(scans.map(async (scan) => await scanTransformation(scan)))

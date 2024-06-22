@@ -1,14 +1,14 @@
-import { Box, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Badge, Spinner, Alert, AlertIcon, IconButton } from '@chakra-ui/react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState, useContext } from 'react';
-import { RadiologyCenterAppointmentsContext } from '../../../../Context/RadiologyCenterContext/RadiologyCenterAppointmentsContext';
+import { Box, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Spinner, Alert, AlertIcon, IconButton } from '@chakra-ui/react';
+import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useRadiologyCenterState } from '../../../../Context/RadiologyCenterContext/RadiologyCenterContext';
 
 function RadiologyCenterAppointments() {
-  const { appointments, loading, error } = useContext(RadiologyCenterAppointmentsContext);
+  const { appointments, loading, error } = useRadiologyCenterState();
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
+  console.log(appointments);
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
@@ -27,11 +27,12 @@ function RadiologyCenterAppointments() {
     );
   }
 
-  const pageCount = Math.ceil(appointments.length / itemsPerPage);
-  const currentAppointments = appointments.data.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const pageCount = Math.ceil(appointments?.data?.data?.length / itemsPerPage);
+  const currentAppointments = appointments?.data?.data?.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
   return (
     <Flex height="85vh" overflowY="auto">
-      <Box flex="1" p="4">
+      <Box flex="1" p="1">
         <Heading mb="4" textAlign={'center'}>Manage Appointments</Heading>
         <TableContainer>
           <Table variant="striped" colorScheme="gray">
@@ -45,7 +46,7 @@ function RadiologyCenterAppointments() {
               </Tr>
             </Thead>
             <Tbody>
-              {currentAppointments.map((appointment, index) => (
+              {currentAppointments?.map((appointment, index) => (
                 <Tr key={index}>
                   <Td>{appointment.patient}</Td>
                   <Td>{appointment.phone}</Td>

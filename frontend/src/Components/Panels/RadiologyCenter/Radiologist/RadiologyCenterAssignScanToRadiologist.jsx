@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Modal,
@@ -19,12 +19,12 @@ import {
   AlertIcon,
   useToast
 } from '@chakra-ui/react';
-import { RadiologyCenterPatientsContext } from '../../../../Context/RadiologyCenterContext/RadiologyCenterPatientsContext';
+import { useRadiologyCenterState } from '../../../../Context/RadiologyCenterContext/RadiologyCenterContext';
 import axios from 'axios';
 import { decodeToken } from '../../../../../Utils/JWT_Decode';
 
 function RadiologyCenterAssignScanToRadiologist({ isOpen, onClose, selectedRadiologistId }) {
-  const { patients, loading, error } = useContext(RadiologyCenterPatientsContext);
+  const { patients, loading, error } = useRadiologyCenterState();
   const [scanPhoto, setScanPhoto] = useState(null);
   const [patientId, setPatientId] = useState('');
   const [notes, setNotes] = useState('');
@@ -96,6 +96,7 @@ function RadiologyCenterAssignScanToRadiologist({ isOpen, onClose, selectedRadio
     }
     onClose();
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -114,14 +115,14 @@ function RadiologyCenterAssignScanToRadiologist({ isOpen, onClose, selectedRadio
             <FormControl>
               <FormLabel>Patient</FormLabel>
               <Select placeholder="Select patient" onChange={(e) => setPatientId(e.target.value)}>
-                {patients.data.map((patient) => (
+                {patients?.data?.data?.map((patient) => (
                   <option key={patient.id} value={patient.id}>
                     {patient.name}
                   </option>
                 ))}
               </Select>
               <FormLabel mt={4}>Scan Photo</FormLabel>
-              <Input type="file" onChange={handlePhotoChange}/>
+              <Input type="file" onChange={handlePhotoChange} />
               <FormLabel mt={4}>Notes</FormLabel>
               <Textarea placeholder="Enter any notes" onChange={(e) => setNotes(e.target.value)} />
             </FormControl>

@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import { Box, SimpleGrid, Spinner, Alert, AlertIcon, Image, Text, Stack, Button, Flex } from '@chakra-ui/react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../../Api/Api';
 
 function WorkingScan({scans,loading,error}) {
+  console.log(scans);
   const navigate = useNavigate();
   const openPatientScans = async (patientId) => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/v1/scan/patient/${patientId}`);
+      const response = await api.get(`/scan/patient/${patientId}`);
       const patientScans = response.data;
       console.log(patientScans);
       // Assuming there's a route and component set up to handle viewing all scans for a patient
@@ -27,7 +28,7 @@ function WorkingScan({scans,loading,error}) {
   return (
     <Box>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
-        {scans.data.map((scan) => (
+        {scans?.data?.map((scan) => (
           <Stack key={scan.id} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} bg="white" boxShadow="md" justify="center" align="center">
             <Box position="relative">
               <Image src={scan.image} alt={scan.name} borderRadius="md" mb={4} />

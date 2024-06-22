@@ -23,7 +23,7 @@ body {
   }
 
 .main{
-    background-image: url('../Images/image2.png');
+    background-image: url('./../assets/Images/MRIBackground.jpg');
     height: 100vh;
     background-size: cover;
     margin-top: 4.5rem;

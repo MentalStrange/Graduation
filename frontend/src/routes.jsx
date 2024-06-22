@@ -8,7 +8,6 @@ import Home from "./Pages/Home";
 import Chat from "./Pages/Chat";
 import DoctorPanel from "./Components/Panels/Doctor/DoctorPanel";
 import Layout from "./Components/Panels/Layout";
-import Questions from "./Pages/Questions";
 import PatientPanel from "./Components/Panels/Patient/PatientPanel";
 import PatientAppointments from "./Components/Panels/Patient/Appointments/PatientAppointments";
 import DoctorAppointments from "./Components/Panels/Doctor/Appointment/DoctorAppointments";
@@ -46,16 +45,23 @@ import { DoctorProvider } from "./Context/DoctorContext/DoctorContext";
 import DoctorPanelWorkingArea from "./Components/Panels/Doctor/DoctorPanelWorkingArea";
 import { PatientProvider } from "./Context/PatientContext/PatientContext";
 import PatientPanelWorkingArea from "./Components/Panels/Patient/PatientPanelWorkingArea";
+import { RadiologyCenterProvider } from "./Context/RadiologyCenterContext/RadiologyCenterContext";
+import RadiologyCenterWorkingArea from "./Components/Panels/RadiologyCenter/RadiologyCenterWorkingArea";
+import RadiologistWorkingArea from "./Components/Panels/Radiologist/RadiologistWorkingArea";
+import { RadiologistProvider } from "./Context/RadiologistContext/RadiologistContext";
+import RadiologistPatientPage from "./Components/Panels/Radiologist/Patients/RadiologistPatientPage";
+import ResultBinaryModel from "./Components/Questions/ResultBinaryModel";
+import Questions from "./Pages/Questions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route index element={<Home />} />
       <Route path="/auth" element={<Auth />} />
-      {/* <Route path="/chat" element={<Chat />} /> */}
+      <Route path="/questions" element={<Questions />} />
+      <Route path="/result" element={<ResultBinaryModel />} />
+      <Route path="/logout" element={<Logout />} />
       <Route element={<Layout />}>
-        <Route path="/questions" element={<Questions />} />
-        <Route path="/logout" element={<Logout />} />
         <Route
           path="/panel/doctor"
           element={
@@ -122,11 +128,13 @@ const router = createBrowserRouter(
           path="/panel/radiologyCenter"
           element={
             <AuthGuard>
-              <RadiologyCenterPanel />
+              <RadiologyCenterProvider>
+                <RadiologyCenterPanel />
+              </RadiologyCenterProvider>
             </AuthGuard>
           }
         >
-          <Route index element={<RadiologyCenterAppointments />} />
+          <Route index element={<RadiologyCenterWorkingArea/>} />
           <Route
             path="appointments"
             element={<RadiologyCenterAppointments />}
@@ -143,15 +151,19 @@ const router = createBrowserRouter(
           path="/panel/radiologist"
           element={
             <AuthGuard>
-              <RadiologistPanel />
+              <RadiologistProvider>
+                <RadiologistPanel />
+              </RadiologistProvider>
             </AuthGuard>
           }
         >
-          <Route index element={<RadiologistPanel />} />
+          <Route index element={<RadiologistWorkingArea />} />
           <Route path="patients" element={<RadiologistPatients />} />
+          <Route path="patients/:patientId" element={<RadiologistPatientPage />} />
           <Route path="scans" element={<RadiologistScans />} />
           <Route path="scans/:patientId" element={<PatientScansPage />} />
           <Route path="patients/:patientId/makeScan" element={<MakeScan />} />
+          <Route path='makeScan' element={<MakeScan />} />
           <Route path="reports" element={<RadiologistReports />} />
         </Route>
       </Route>

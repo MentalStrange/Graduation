@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { usePatientState, usePatientDispatch } from '../../../../Context/PatientContext/PatientContext';
 import { formatDate } from '../../../../../Utils/formatDate';
-import axios from 'axios';
+import api from '../../../../Api/Api';
 
 const statusColorScheme = {
   pending: 'orange',
@@ -33,7 +33,7 @@ function PatientReports() {
   const fetchReportsByDate = async (date) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await axios.get(`http://localhost:5001/api/v1/report/patient/date/${date.toISOString()}`);
+      const response = await api.get(`/report/patient/date/${date.toISOString()}`);
       dispatch({ type: 'SET_REPORTS', payload: { data: response.data.data } });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error });

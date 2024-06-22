@@ -1,7 +1,6 @@
 import { Box, Flex, Divider, useColorModeValue } from "@chakra-ui/react";
 import RadiologyCenterNavbar from "./RadiologyCenterNavbar";
 import { Outlet } from "react-router-dom";
-import RadiologyCenterWorkingArea from "./RadiologyCenterWorkingArea";
 
 function RadiologyCenterPanel() {
   return (
@@ -11,7 +10,6 @@ function RadiologyCenterPanel() {
       </Box>
       <Divider />
       <Box >
-        <RadiologyCenterWorkingArea/>
         <Outlet/>
       </Box>
     </Flex>

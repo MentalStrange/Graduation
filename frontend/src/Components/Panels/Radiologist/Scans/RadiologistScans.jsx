@@ -1,15 +1,12 @@
-import {  useState } from 'react';
+import { useState } from 'react';
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs, Heading, Alert, AlertIcon, Spinner } from '@chakra-ui/react';
 import WorkingScan from './WorkingScan';
 import FinishScan from './FinishScan';
-import { decodeToken } from '../../../../../Utils/JWT_Decode';
+import { useRadiologistState } from '../../../../Context/RadiologistContext/RadiologistContext';
 
 function RadiologistScans() {
   const [tabIndex, setTabIndex] = useState(0);
-  const token = localStorage.getItem('userToken');
-  const radiologistId = decodeToken(token).id;
-  const { data: scans, loading, error } = useFetch(`http://localhost:5001/api/v1/scan/radiologist/${radiologistId}`);
-
+  const { scans, loading, error } = useRadiologistState();
   if (loading) {
     return <Box p={4}><Spinner /></Box>;
   }
@@ -35,8 +32,9 @@ function RadiologistScans() {
       </Box>
     );
   }
-  const workingScans = scans.data.filter(scan => scan.status === "notReported");
-  const completedScans = scans.data.filter(scan => scan.status === "reported");
+
+  const workingScans = scans?.data?.data?.filter(scan => scan.status === "notReported");
+  const completedScans = scans?.data?.data?.filter(scan => scan.status === "reported");
 
   const handleTabsChange = (index) => {
     setTabIndex(index);

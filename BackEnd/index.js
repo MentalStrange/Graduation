@@ -22,21 +22,18 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const app = express();
 
-// Define __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware to handle JSON requests
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); // Increase limit to handle large base64 images
+app.use(express.json({ limit: '50mb' }));
 
-// Base64 Image upload endpoint
+
 app.post('/upload', (req, res) => {
   const { image, fileName } = req.body;
   if (!image || !fileName) {
     return res.status(400).send('No image or fileName provided.');
   }
-
   const matches = image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   if (!matches || matches.length !== 3) {
     return res.status(400).send('Invalid image format.');
@@ -57,7 +54,7 @@ app.post('/upload', (req, res) => {
 // Serve the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-mongoose.connect(process.env.MONGO_URL_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URL_LOCAL)
   .then(() => console.log("Connected to database"))
   .catch((error) => {
     console.log(error.message);

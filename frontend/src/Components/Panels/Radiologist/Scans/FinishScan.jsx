@@ -9,7 +9,7 @@ function FinishScan({scans, loading, error}) {
   return (
     <Box>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
-        {scans.data.map((scan) => (
+        {scans?.data?.map((scan) => (
           <Stack key={scan.id} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} bg="white" boxShadow="md" justify="center" align="center">
             <Box position="relative">
               <Image src={scan.image} alt={scan.name} borderRadius="md" mb={4} />

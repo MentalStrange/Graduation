@@ -1,70 +1,47 @@
-import { Flex, Heading, Icon, Link, Stack, Text, SimpleGrid, Box } from "@chakra-ui/react";
+import { Flex, Heading, Icon,  Stack, Text, SimpleGrid, Box, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import HistoryIcon from "@mui/icons-material/History";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import RadiologyCenterPatentBoard from "./RadiologyCenterPatentBoard";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import RadiologyCenterAppointmentsWorkingArea from "./RadiologyCenterAppointmentsWorkingArea";
 import RadiologyCenterReportWorkingArea from "./RadiologyCenterReportWorkingArea";
-
-const data = [
-  {
-    name: "Dr. John Doe",
-    title: "Cardiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "purple.100"
-  },
-  {
-    name: "Dr. Jane Smith",
-    title: "Surgeon",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "orange.100"
-  },
-  {
-    name: "Dr. Alice Brown",
-    title: "Radiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "green.100"
-  },
-  {
-    name: "Dr. Bob Johnson",
-    title: "Radiologist",
-    time: "10-20 pm",
-    address: "https://bit.ly/sage-adebayo",
-    bgColor: "blue.100"
-  },
-];
+import { useRadiologyCenterState } from "../../../Context/RadiologyCenterContext/RadiologyCenterContext";
+import RadiologyCenterPatientBoard from "./RadiologyCenterPatientBoard";
+import { Link } from "react-router-dom";
 
 function RadiologyCenterWorkingArea() {
+  const { radiologyCenter, appointments, patients, reports, loading, error } = useRadiologyCenterState();
+
+  if (loading) return <Spinner />;
+  if (error) return <Alert status="error"><AlertIcon />{error.message}</Alert>;
+
   return (
     <Flex mx={4} flexDirection={{ base: "column", lg: "row" }} gap={4}>
       {/* Left Side - Appointments and Patients Board */}
       <Box flex="3">
         <Stack>
-          <Heading m={0}>Welcome Dr. {"Ahmed"}</Heading>
+          <Heading m={0}>Welcome {radiologyCenter?.data?.data?.name}</Heading>
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"}>
               <Icon mr={1} as={HistoryIcon} />
               <Text m={0}>Appointments</Text>
             </Flex>
-            <Link href="#" color="blue.500">
-          View All <Icon as={ArrowForwardIcon} />
-        </Link>
+            <Text m={0} color={"blue.500"}>
+              <Link to={'appointment'}>
+                View All <Icon as={ArrowForwardIcon} />
+            </Link>
+            </Text>
           </Flex>
-          {/* <hr /> */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={4}>
-            {data.map((item, index) => (
-              <RadiologyCenterAppointmentsWorkingArea key={index} data={item} />
+            {appointments?.data?.data?.slice(0, 4).map((appointment, index) => (
+              <RadiologyCenterAppointmentsWorkingArea key={index} data={appointment} />
             ))}
           </SimpleGrid>
-          <RadiologyCenterPatentBoard />
+          <RadiologyCenterPatientBoard patients={patients.data} />
         </Stack>
       </Box>
 
       {/* Right Side - Reports */}
       <Box flex="1">
-        <RadiologyCenterReportWorkingArea />
+        <RadiologyCenterReportWorkingArea reports={reports.data} />
       </Box>
     </Flex>
   );

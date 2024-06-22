@@ -20,7 +20,7 @@ function RadiologyCenterScans() {
   }
 
   return (
-    <Box p={4}>
+    <Box p={4} overflow={'auto'} h={'85vh'}>
       <Heading as="h1" size="lg" mb={4}>Scans</Heading>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
         {scans.data.map((scan) => (

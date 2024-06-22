@@ -8,9 +8,7 @@ import Scan from "../model/scanModel.js";
 export const getAllReports = async (req,res) => {
   try {
     const reports = await Report.find();
-    const transformReports = reports.map((report) => {
-      return reportTransformation(report)
-    })
+    const transformReports = await Promise.all(reports.map(async report => reportTransformation(report)));
     if(reports){
       return res.status(200).json({
         status:"success",
@@ -118,9 +116,7 @@ export const getReportByRadiologist = async (req,res) => {
   const radiologistId = req.params.id;
   try {
     const reports = await Report.find({radiologist:radiologistId});
-    const transformReports = reports.map((report) => {
-      return reportTransformation(report)
-    })
+    const transformReports = await Promise.all(reports.map(async report => reportTransformation(report)));
     if(reports){
       return res.status(200).json({
         status:"success",
@@ -169,3 +165,21 @@ export const deleteReport = async (req,res) => {
     })
   }
 } 
+export const getReportByRadiologyCenter = async (req,res) => {
+  const radiologyCenterId = req.params.id;
+  try {
+    const reports = await Report.find({radiologyCenter:radiologyCenterId});
+    const transformReports = await Promise.all(reports.map(async report => reportTransformation(report)));
+    if(reports){
+      return res.status(200).json({
+        status:"success",
+        data:transformReports
+      })
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status:"fail",
+      message:error.message
+    })
+  }
+}

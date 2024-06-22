@@ -1,13 +1,14 @@
 import { Box, Button, Flex, Heading, IconButton, Table, Thead, Tbody, Tr, Th, Td, Spinner, Alert, AlertIcon, useDisclosure } from '@chakra-ui/react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import RadiologyCenterAssignScanToRadiologist from './RadiologyCenterAssignScanToRadiologist';
-import { RadiologyCenterRadiologistContext } from '../../../../Context/RadiologyCenterContext/RadiologyCenterRadiologistContext';
+import { useRadiologyCenterState } from '../../../../Context/RadiologyCenterContext/RadiologyCenterContext';
 
 function RadiologyCenterRadiologists() {
-  const { radiologists, loading, error } = useContext(RadiologyCenterRadiologistContext);
+  const { radiologists, loading, error } = useRadiologyCenterState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRadiologistId, setSelectedRadiologistId] = useState('');
+  console.log(radiologists);
   const handleAssignScan = (radiologistId) => {
     setSelectedRadiologistId(radiologistId);
     onOpen();
@@ -29,7 +30,7 @@ function RadiologyCenterRadiologists() {
   return (
     <Box p={4}>
       <Flex justify="space-between" align="center" mb={4}>
-        <Heading as="h1" size="lg">Manage Radiologists</Heading>
+        <Heading as="h1" size="lg" textAlign="center">Manage Radiologists</Heading>
       </Flex>
       <Table variant="striped" colorScheme="gray">
         <Thead>
@@ -42,7 +43,7 @@ function RadiologyCenterRadiologists() {
           </Tr>
         </Thead>
         <Tbody>
-          {radiologists.data.map((radiologist, index) => (
+          {radiologists?.data?.data?.map((radiologist, index) => (
             <Tr key={index}>
               <Td>{radiologist.name}</Td>
               <Td>{radiologist.numberOfFinishedScans}</Td>

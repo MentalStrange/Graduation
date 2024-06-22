@@ -1,36 +1,25 @@
 import { useState } from 'react';
-import { Box, Flex, Heading, Text, Badge, SimpleGrid, Button, VStack, Grid } from '@chakra-ui/react';
-
+import { Box, Flex, Heading, Text, SimpleGrid, VStack, Grid, Alert, AlertIcon, Spinner } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useRadiologyCenterState } from '../../../../Context/RadiologyCenterContext/RadiologyCenterContext';
+import { formatDate } from '../../../../../Utils/formatDate';
 
-const reports = [
-  { type: 'MRI Report', doctor: 'Mohamed Ramadan', dueDate: 'February 10, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Ahmed Mohamed', dueDate: 'March 5, 2024', status: 'Completed' },
-  { type: 'X-ray', doctor: 'Amany Mohamed', dueDate: 'April 15, 2024', status: 'In Progress' },
-  { type: 'MRI Report', doctor: 'Enas Mohamed', dueDate: 'April 8, 2024', status: 'Not Started' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-  { type: 'CT Report', doctor: 'Yasmin Mohamed', dueDate: 'May 20, 2024', status: 'Not Submitted' },
-];
-
-const statusColorScheme = {
-  'Not Submitted': 'red',
-  'Completed': 'green',
-  'In Progress': 'purple',
-  'Not Started': 'orange',
-};
+const color = [
+  'red.100',
+  'green.100',
+  'blue.100',
+  'orange.100',
+]
 
 function RadiologyCenterReports() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const state = useRadiologyCenterState();  // Corrected the use of the hook
+  const { reports, loading, error } = state;
+  console.log(reports);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // Send request to get the report by date
     fetchReportsByDate(date);
   };
 
@@ -39,30 +28,42 @@ function RadiologyCenterReports() {
     console.log('Fetching reports for date:', date);
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return (
+      <Alert status="error">
+        <AlertIcon />
+        {error.message}
+      </Alert>
+    );
+  }
+
   return (
     <Box p="4" height="85vh" overflowY="auto">
       <Grid templateColumns={{ base: '1fr', lg: '3fr 1fr' }} gap="4">
         <Box>
           <Flex justify="space-between" align="center" mb="4">
-            <Heading size="lg">Welcome, Patient</Heading>
-            <Button variant="link" colorScheme="blue">View all</Button>
+            <Heading size="lg">Reports</Heading>
           </Flex>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="4">
-            {reports.map((report, index) => (
-              <Box key={index} p="4" borderWidth="1px" borderRadius="lg">
+            {reports.data?.data?.map((report, index) => (
+              <Box key={index} p="4" borderWidth="2.5px" borderRadius="lg" borderColor={color[index % color.length]}>
                 <Flex justify="space-between" align="center" mb="2">
-                  <Heading size="md">{report.type}</Heading>
-                  <Badge colorScheme={statusColorScheme[report.status]}>{report.status}</Badge>
+                  <Heading size="md">{report.patient}</Heading>
                 </Flex>
-                <Text>Doctor Name: {report.doctor}</Text>
-                <Text>Due Date: {report.dueDate}</Text>
+                <Text>Radiologist: {report.radiologist}</Text>
+                <Text>Due Date: {formatDate(report.date)}</Text>
+                <Text>Description: {report.description}</Text>
+                <Text>Examination: {report.examination}</Text>
               </Box>
             ))}
           </SimpleGrid>
         </Box>
         <Box>
           <VStack>
-            {/* <CalendarIcon boxSize="6" /> */}
             <Text>{selectedDate.toDateString()}</Text>
             <DatePicker
               selected={selectedDate}
