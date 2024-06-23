@@ -12,7 +12,6 @@ function DoctorPrescriptions() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const token = localStorage.getItem('userToken');
   const doctorId = decodeToken(token).id;
-  console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhh",doctorId);
   const { data, loading, error } = useFetch(`http://localhost:5001/api/v1/prescription/doctor/${doctorId}?date=${selectedDate.toISOString()}`);
   const handlePageClick = (page) => {
     setCurrentPage(page);

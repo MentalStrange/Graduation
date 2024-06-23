@@ -1,15 +1,19 @@
 import { patientDetails, patientTransformation } from "../format/transformation.js";
 import Patient from "../model/patientModel.js";
 import Prescription from "../model/prescriptionModel.js";
-
+import bcrypt from "bcrypt";
 export const updatePatient = async (req,res) => {
+  const patientId = req.params.id
   const patient = req.body
   try {
-    const newPatient = await Patient.findByIdAndUpdate(patient._id,patient);
-    res.status(200).json({
-      status:"success",
-      data:patientTransformation(newPatient)  
-    })
+    if(req.body.password){
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+    }
+      const newPatient = await Patient.findByIdAndUpdate(patientId, patient);
+      return res.status(200).json({
+        status:"success",
+        data:patientTransformation(newPatient)  
+      })
   }catch(error){
     return res.status(500).json({
       status:"fail",

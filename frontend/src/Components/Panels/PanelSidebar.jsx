@@ -30,48 +30,49 @@ function PanelSidebar({ onToggle, isOpen }) {
 
   const linksByRole = {
     doctor: [
+      { to: "/", label: "Home" },
       { to: "/panel/doctor", label: "Dashboard" },
       { to: "/panel/doctor/appointments", label: "Appointments" },
       { to: "/panel/doctor/patients", label: "Patients" },
       { to: "/panel/doctor/prescriptions", label: "Prescriptions" },
       { to: "/panel/doctor/settings", label: "Settings" },
       { to: "/logout", label: "Logout" },
-
     ],
     radiologist: [
+      { to: "/", label: "Home" },
       { to: "/panel/radiologist", label: "Dashboard" },
-      {to:"/panel/radiologist/patients", label:"Patients"},
+      { to: "/panel/radiologist/patients", label: "Patients" },
       { to: "/panel/radiologist/scans", label: "Scans" },
-      {to:"/panel/radiologist/makeScan", label:"Make Scan"},
+      { to: "/panel/radiologist/makeScan", label: "Make Scan" },
       { to: "/panel/radiologist/reports", label: "Reports" },
-      {to:"/panel/radiologist/chat", label:"Chat"},
       { to: "/panel/radiologist/settings", label: "Settings" },
       { to: "/logout", label: "Logout" },
-
     ],
     patient: [
+      { to: "/", label: "Home" },
       { to: "/panel/patient", label: "Dashboard" },
       { to: "/panel/patient/appointments", label: "Appointments" },
-      {to:"/panel/patient/radiologyCenter", label:"Radiology Center Appointments"},
+      { to: "/panel/patient/radiologyCenter", label: "Center Appointments" },
       { to: "/panel/patient/reports", label: "Reports" },
       { to: "/panel/patient/scans", label: "Scans" },
       { to: "/panel/patient/prescriptions", label: "Prescriptions" },
       { to: "/panel/patient/doctors", label: "Doctors" },
-      // {to:"/panel/patient/chat", label:"Chat"},
-      {to:"/panel/patient/settings", label:"Settings"},
+      { to: "/panel/patient/settings", label: "Settings" },
       { to: "/logout", label: "Logout" },
     ],
     radiologyCenter: [
+      { to: "/", label: "Home" },
       { to: "/panel/radiologyCenter", label: "Dashboard" },
       { to: "/panel/radiologyCenter/appointments", label: "Appointments" },
       { to: "/panel/radiologyCenter/patients", label: "Patients" },
-      { to: "/panel/radiologyCenter/Radiologists", label: "Radiologists" },
+      { to: "/panel/radiologyCenter/radiologists", label: "Radiologists" },
       { to: "/panel/radiologyCenter/reports", label: "Reports" },
       { to: "/panel/radiologyCenter/scans", label: "Scans" },
-      {to:"/panel/radiologyCenter/settings", label:"Settings"},
+      { to: "/panel/radiologyCenter/settings", label: "Settings" },
       { to: "/logout", label: "Logout" },
     ],
     receptionist: [
+      { to: "/", label: "Home" },
       { to: "/panel/receptionist", label: "Dashboard" },
       { to: "/panel/receptionist/radiologists", label: "Radiologists" },
       { to: "/panel/receptionist/doctors", label: "Doctors" },
@@ -81,6 +82,14 @@ function PanelSidebar({ onToggle, isOpen }) {
       { to: "/panel/receptionist/addNewRadiologyCenter", label: "Add New Radiology Center" },
       { to: "/logout", label: "Logout" },
     ],
+  };
+
+  const categoryCounts = {
+    doctor: { specialized: 2, general: 3, settings: 2 },
+    radiologist: { specialized: 2, general: 3, settings: 2 },
+    patient: { specialized: 2, general: 6, settings: 2 },
+    radiologyCenter: { specialized: 2, general: 5, settings: 2 },
+    receptionist: { specialized: 2, general: 3, settings: 2 },
   };
 
   return (
@@ -95,23 +104,23 @@ function PanelSidebar({ onToggle, isOpen }) {
         flexDirection="column"
         justifyContent="space-between"
         p={isOpen ? 4 : 0}
-        overflow="hidden" // Ensure no overflow when closed
+        overflow="hidden"
       >
         <VStack spacing={5} align="stretch">
           <Box display="flex" justifyContent="center" mb={6}>
             {isOpen && <Image src={logo} alt="logo" w="150px" />}
           </Box>
-          <VStack align="stretch" spacing={2}>
+          <VStack align="stretch" spacing={1}>
             {role && isOpen && (
               <>
-                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SPECIALIZED</Text>
-                {renderLinks(linksByRole[role].slice(0, 4))}
-                <hr style={{ width: "100%", borderColor: "white" }} />
                 <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">GENERAL</Text>
-                {renderLinks(linksByRole[role].slice(4, 7))}
+                {renderLinks(linksByRole[role].slice(0, categoryCounts[role].specialized))}
+                <hr style={{ width: "100%", borderColor: "white" }} />
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SPECIALIZED</Text>
+                {renderLinks(linksByRole[role].slice(categoryCounts[role].specialized, categoryCounts[role].specialized + categoryCounts[role].general))}
                 <hr style={{ width: "100%", borderColor: "white" }} />
                 <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SETTINGS</Text>
-                {renderLinks(linksByRole[role].slice(7))}
+                {renderLinks(linksByRole[role].slice(categoryCounts[role].specialized + categoryCounts[role].general))}
               </>
             )}
           </VStack>

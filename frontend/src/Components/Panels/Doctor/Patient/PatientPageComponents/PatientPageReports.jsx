@@ -2,10 +2,11 @@
 import { Box, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { formatDate } from "../../../../../../Utils/formatDate";
 
 function PatientPageReports({ reports }) {
-  // Fake reports data
+  const { patientId } = useParams();
   return (
     <Box mt={8} maxHeight="calc(100vh - 200px)" overflowY="auto">
       <Flex align={"center"} justify={"space-between"} mb={4}>
@@ -14,7 +15,7 @@ function PatientPageReports({ reports }) {
           <Text m={0}>Reports</Text>
         </Flex>
         <Text color="blue.500" m={0}>
-          <Link to={"reports"}>
+          <Link to={`/panel/doctor/patients/${patientId}/reports`}>
             View All <Icon as={ArrowForwardIcon} />
           </Link>
         </Text>
@@ -30,13 +31,10 @@ function PatientPageReports({ reports }) {
             color="white"
           >
             <Flex justifyContent="space-between" alignItems="center" mb={2}>
-              <Text fontWeight="bold" color={'black'}>{report.type}</Text>
-              <Text fontSize="sm" color={report.statusColor}>
-                {report.status}
-              </Text>
+              <Text fontWeight="bold" color={'black'}>{report.patient}</Text>
             </Flex>
-            <Text color={'black'}>Patient Name: {report.patientName}</Text>
-            <Text color={'black'}>Due Date: {report.dueDate}</Text>
+            <Text color={'black'} m={0}>Radiologist: {report.radiologist}</Text>
+            <Text color={'black'}>Date: {formatDate(report.date)}</Text>
           </Box>
         ))}
       </Stack>

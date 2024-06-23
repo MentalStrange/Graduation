@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { decodeToken } from "../../../../../Utils/JWT_Decode";
+import api from "../../../../Api/Api";
 
 function MakeScan() {
   const [scan, setScan] = useState(null);
@@ -38,7 +39,7 @@ function MakeScan() {
   const toast = useToast();
   const { patientId } = useParams();
   const location = useLocation();
-  const scanId = location.state?.scanId;  // Retrieved scanId from state
+  const scanId = location.state?.scanId;
 
   useEffect(() => {
     if (patientId) {
@@ -52,7 +53,7 @@ function MakeScan() {
   useEffect(() => {
     const token = localStorage.getItem("userToken");
     if (token) {
-      const radiologistId = decodeToken(token)?.id; // Use optional chaining to avoid errors
+      const radiologistId = decodeToken(token)?.id;
       if (radiologistId) {
         setReportDetails(prevDetails => ({
           ...prevDetails,
@@ -88,36 +89,37 @@ function MakeScan() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/v1/report",
-        reportDetails,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const response2 = await axios.patch(`http://localhost:5001/api/v1/scan/${scanId}`,{
-        reportId:response.data.data._id
+      const response = await api.post("/report", reportDetails, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      console.log(response2);
-      if (response.data.status === "success") {
-        toast({
-          title: "Report Submitted",
-          description: "The report has been successfully submitted.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
-        closeModal(); // Close modal on success
-      } else {
+
+      if (response.data.status !== "success") {
         throw new Error(response.data.message);
       }
+
+      const response2 = await api.patch(`/scan/${scanId}`, {
+        reportId: response.data.data._id
+      });
+
+      if (response2.data.status !== "success") {
+        throw new Error(response2.data.message);
+      }
+
+      toast({
+        title: "Report Submitted",
+        description: "The report has been successfully submitted and scan updated.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      closeModal(); // Close modal on success
     } catch (error) {
       toast({
         title: "Submission Failed",
-        description: `Failed to submit report: ${error.message}`,
+        description: `Failed to submit report or update scan: ${error.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -143,15 +145,11 @@ function MakeScan() {
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/predict",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:5000/predict", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setPrediction(response.data.data.prediction);
       toast({
         title: "Success",

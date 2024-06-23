@@ -1,10 +1,14 @@
 import { doctorTransformation } from "../format/transformation.js";
 import { checkApproved } from "../helper/checkApprovedDoctor.js";
 import Doctor from "../model/doctorModel.js";
+import bcrypt from "bcrypt";
 
 export const updateDoctor = async (req, res) => {
   const doctorId = req.params.id;
   try {
+    if(req.body.password){
+      req.body.password = await bcrypt.hash(req.body.password, 10)
+    }
     const updatedDoctor = await Doctor.findByIdAndUpdate(doctorId, req.body, {
       new: true,
     });

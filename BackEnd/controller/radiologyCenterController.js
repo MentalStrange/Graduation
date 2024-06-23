@@ -1,10 +1,19 @@
 import { radiologyCenterTransformation } from "../format/transformation.js";
 import RadiologyCenter from "../model/radiologyCenterModel.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const updateRadiologyCenter = async (req,res) => {
   const radiologyCenter = req.body
+  const radiologyCenterId = req.params.id
+  console.log('radiologyCenter',radiologyCenterId);
+  
   try {
-    const newRadiologyCenter = await RadiologyCenter.findByIdAndUpdate(radiologyCenter._id,radiologyCenter);
+    if(req.body.password){
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      radiologyCenter.password = hashedPassword
+    }
+    const newRadiologyCenter = await RadiologyCenter.findByIdAndUpdate(radiologyCenterId,radiologyCenter);
     res.status(200).json({
       status:"success",
       data:radiologyCenterTransformation(newRadiologyCenter)  

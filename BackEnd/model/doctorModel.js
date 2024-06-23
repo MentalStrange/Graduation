@@ -54,9 +54,12 @@ const doctorSchema = mongoose.Schema({
   qualification:[{
     type:String,
   }],
-  timeSlots:[{
+  startHour:{
     type:String
-  }],
+  },
+  endHour:{
+  type:String
+  },
   image:{
     type:String
   },

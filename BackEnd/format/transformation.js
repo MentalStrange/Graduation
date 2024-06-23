@@ -19,6 +19,7 @@ export const patientTransformation = (patient) => {
     address:patient.address,
     age:patient.age,
     gender:patient.gender,
+    about:patient.about
   }
 }
 export const doctorTransformation = async (doctor) => {
@@ -32,8 +33,10 @@ export const doctorTransformation = async (doctor) => {
     specialization:doctor.specialization,
     phone:doctor.phone,
     gender:doctor.gender,
-    timeSlots:doctor.timeSlots,
-    address:doctor.address
+    startHour:doctor.startHour,
+    endHour:doctor.endHour,
+    address:doctor.address,
+    bio:doctor.bio
   }
 }
 export const receptionistTransformation = (receptionist) => {
@@ -64,12 +67,18 @@ export const radiologistTransformation = async (radiologist) => {
   }
 }
 export const radiologyCenterTransformation = (radiologyCenter) => {
+  console.log('radiologyCenter',radiologyCenter._id);
   return{
     id: radiologyCenter._id,
     name:radiologyCenter.name,
     email:radiologyCenter.email,
     nationalId:radiologyCenter.nationalId,
-    ...radiologyCenter
+    phone:radiologyCenter.phone,
+    address:radiologyCenter.address,
+    image:radiologyCenter.image,
+    startHour:radiologyCenter.startHour,
+    endHour:radiologyCenter.endHour,
+    
   }
 }
 export const appointmentTransformation = async (appointment) => {

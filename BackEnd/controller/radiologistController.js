@@ -5,11 +5,12 @@ import Scan from "../model/scanModel.js";
 
 export const updateRadiologist = async (req, res) => {
   const radiologistData = req.body;  // Renamed from 'radiologist' to 'radiologistData'
+  const radiologistId = req.params.id;
   try {
-    const updatedRadiologist = await Radiologist.findByIdAndUpdate(radiologistData._id, radiologistData);
+    const updatedRadiologist = await Radiologist.findByIdAndUpdate(radiologistId, radiologistData);
     res.status(200).json({
       status: "success",
-      data: radiologistTransformation(updatedRadiologist)
+      data: await radiologistTransformation(updatedRadiologist)
     });
   } catch (error) {
     return res.status(500).json({

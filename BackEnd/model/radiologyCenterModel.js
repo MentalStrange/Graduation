@@ -18,6 +18,15 @@ const radiologyCenterSchema = mongoose.Schema({
   },
   address:{
     type:String,
+  },
+  image:{
+    type:String
+  },
+  startHour:{
+    type:String
+  },
+  endHour:{
+    type:String
   }
 }) 
 

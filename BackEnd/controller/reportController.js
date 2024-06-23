@@ -29,7 +29,7 @@ export const getReportById = async (req,res) => {
     if(report){
       return res.status(200).json({
         status:"success",
-        data:reportTransformation(report)
+        data:await reportTransformation(report)
       })
     }
   } catch (error) {
@@ -138,7 +138,7 @@ export const updateReport = async (req,res) => {
     if(newReport){
       return res.status(200).json({
         status:"success",
-        data:reportTransformation(newReport)
+        data:await reportTransformation(newReport)
       })
     }
   } catch (error) {
@@ -155,7 +155,7 @@ export const deleteReport = async (req,res) => {
     if(deletedReport){
       return res.status(200).json({
         status:"success",
-        data:reportTransformation(deletedReport)
+        data:await reportTransformation(deletedReport)
       })
     }
   } catch (error) {

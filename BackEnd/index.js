@@ -55,7 +55,7 @@ app.post('/upload', (req, res) => {
 // Serve the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-mongoose.connect(process.env.MONGO_URL_LOCAL)
+await mongoose.connect(process.env.MONGO_URL_DEV)
   .then(() => console.log("Connected to database"))
   .catch((error) => {
     console.log(error.message);

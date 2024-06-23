@@ -35,7 +35,7 @@ function DoctorPatient() {
 
   return (
     <Box p={4}>
-      <Heading as="h1" size="lg" mb={4}>My Patients</Heading>
+      <Heading as="h1" size="lg" mb={4}>Patients</Heading>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
         {patientsData.length > 0 ? (
           patientsData.map((patient) => (

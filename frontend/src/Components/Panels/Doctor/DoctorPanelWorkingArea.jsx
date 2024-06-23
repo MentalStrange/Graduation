@@ -32,7 +32,7 @@ function DoctorPanelWorkingArea() {
       {/* Left Side - Appointments and Patients Board */}
       <Box flex="3">
         <Stack>
-          <Heading m={0}>Welcome Dr. {doctorData.name || 'N/A'}</Heading>
+          <Heading mt={4} size="lg">Welcome Dr. {doctorData.name || 'N/A'}</Heading>
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"}>
               <Icon mr={1} as={HistoryIcon} />

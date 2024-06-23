@@ -2,34 +2,45 @@ import { prescriptionTransformation } from "../format/transformation.js";
 import Doctor from "../model/doctorModel.js";
 import Patient from "../model/patientModel.js";
 import Prescription from "../model/prescriptionModel.js";
+import Scan from "../model/scanModel.js";
 
-export const createPrescription = async (req,res) => {
+export const createPrescription = async (req, res) => {
   const prescription = req.body;
+  console.log(prescription);
+  const reportId = prescription.report;
   try {
     const patient = await Patient.findById(prescription.patient);
-    if(!patient){
+    if (!patient) {
       return res.status(404).json({
-        status:"fail",
-        message:"Patient Not Found"
-      })
+        status: "fail",
+        message: "Patient Not Found"
+      });
     }
     const doctor = await Doctor.findById(prescription.doctor);
-    if(!doctor){
+    if (!doctor) {
       return res.status(404).json({
-        status:"fail",
-        message:"Doctor Not Found"
-      })
+        status: "fail",
+        message: "Doctor Not Found"
+      });
     }
-    const newPrescription = await Prescription.create(prescription);
+    const scan = await Scan.findOne({ reportId: reportId });
+    console.log(scan);
+    if (!scan) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Scan Not Found"
+      });
+    }
+    const newPrescription = await Prescription.create({ scan: scan._id, ...prescription });
     res.status(200).json({
-      status:"success",
-      data:prescriptionTransformation(newPrescription)  
-    })
-  }catch(error){
+      status: "success",
+      data: await prescriptionTransformation(newPrescription)
+    });
+  } catch (error) {
     return res.status(500).json({
-      status:"fail",
-      message:error.message
-    })
+      status: "fail",
+      message: error.message
+    });
   }
 }
 export const updatePrescription = async (req,res) => {

@@ -58,12 +58,12 @@ export const getScansByRadiologyCenterId = async (req, res) => {
   try {
     const scans = await Scan.find({ radiologyCenterId: radiologyCenterId });
     const scansTransformation = await Promise.all(scans.map(async scan => scanTransformation(scan)));
-    if (!scans || scans.length === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No scans found for this radiology center."
-      });
-    }
+    // if (!scans || scans.length === 0) {
+    //   return res.status(404).json({
+    //     status: "fail",
+    //     message: "No scans found for this radiology center."
+    //   });
+    // }
     return res.status(200).json({
       status: "success",
       data: scansTransformation
@@ -80,12 +80,13 @@ export const getScansByRadiologistId = async (req, res) => {
   try {
     const scans = await Scan.find({ radiologistId: radiologistId });
     const scansTransformation = await Promise.all(scans.map(async scan => scanTransformation(scan)));
-    if (!scans || scans.length === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No scans found for this radiologist."
-      });
-    }
+    // if (!scans || scans.length === 0) {
+    //   return res.status(404).json({
+    //     status: "fail",
+    //     data:[],
+    //     message: "No scans found for this radiologist."
+    //   });
+    // }
     return res.status(200).json({
       status: "success",
       data: scansTransformation
@@ -100,6 +101,7 @@ export const getScansByRadiologistId = async (req, res) => {
 export const updateScan = async (req, res) => {
   const scanId = req.params.id;
   const updateData = req.body;
+  console.log(updateData);
   try {
     if(updateData.reportId){
       const report = await Report.findById(updateData.reportId);
@@ -128,3 +130,11 @@ export const updateScan = async (req, res) => {
     });
   }
 };
+export const getScanByReportId = async (req,res) => {
+  const reportId = req.params.id;
+  const scan = await Scan.findOne({reportId:reportId});
+  return res.status(200).json({
+    status:"success",
+    data:scan
+  })
+}

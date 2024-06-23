@@ -37,10 +37,10 @@ function DoctorPatientPage() {
   const patientData = data.data;
 
   return (
-    <Flex mx={4} flexDirection={{ base: "column", lg: "row" }} gap={4}>
+    <Flex mx={4} flexDirection={{ base: "column", lg: "row" }} gap={4} overflow={'auto'} h={'85vh'}>
       <Box flex="3">
         <Stack>
-          <Heading m={0}>Patient Name: {patientData.patient.name}</Heading>
+          <Heading mt={4} size="lg">Patient Name: {patientData.patient.name}</Heading>
           <Flex align={"center"} justify={"space-between"}>
             <Flex align={"center"}>
               <Icon mr={1} as={HistoryIcon} />
@@ -59,8 +59,12 @@ function DoctorPatientPage() {
         </Stack>
       </Box>
       <Stack flex="1">
-        <PatientPageReports reports={patientData.reports} />
-        <PatientPageScans scans={patientData.scans} />
+        <Stack>
+          <PatientPageReports reports={patientData.reports} />
+        </Stack>
+        <Stack>
+          <PatientPageScans scans={patientData.scans} />
+        </Stack>
       </Stack>
     </Flex>
   );

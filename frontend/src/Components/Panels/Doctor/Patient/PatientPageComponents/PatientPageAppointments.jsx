@@ -33,6 +33,10 @@ function PatientPageAppointments({ appointments }) {
           <Icon mr={1} as={LocationOnIcon} />
           <Text m={0}>{appointments.phone}</Text>
         </Flex>
+        <Flex align={"center"}>
+          <Icon mr={1} as={LocationOnIcon} />
+          <Text m={0}>{appointments.status}</Text>
+        </Flex>
       </Stack>
     </Box>
   );

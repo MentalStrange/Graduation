@@ -1,14 +1,12 @@
-import { useContext } from "react"
-import { AuthContext } from "../../Context/AuthenticationContext"
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthenticationContext";
 
-function AuthGuard({children}) {
-  const {isAuthenticated} = useContext(AuthContext);
-  const navigate = useNavigate();
-  if(!isAuthenticated) {
-    navigate("/auth");
-  }
-  return children;
-}
+const AuthGuard = ({ children }) => {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  return isAuthenticated ? children : <Navigate to="/auth" replace />;
+};
 
 export default AuthGuard;

@@ -14,11 +14,12 @@ import {
 } from "@chakra-ui/react";
 import image8 from "./../assets/Images/image8.png";
 import "../styles/App.css";
-import { useState } from "react";
-import axios from "axios";
+import { useState, useContext } from "react";
 import logo from "./../assets/Images/purpleLogo.png";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthenticationContext";
 import { jwtDecode } from "jwt-decode";
+import api from "../Api/Api";
 
 function Auth() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -26,6 +27,7 @@ function Auth() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
+  const { login } = useContext(AuthContext); // Use the login function from the context
 
   // Change handlers
   const changeLoginHandler = (e) => {
@@ -46,16 +48,17 @@ function Auth() {
           "Content-Type": "application/json",
         },
       };
-      const response = await axios.post(
-        "http://localhost:5001/api/v1/auth/login",
+      const response = await api.post(
+        "/auth/login",
         loginData,
         config
       );
       setLoading(false);
       localStorage.setItem('userToken', response.data.token);
       const decodedToken = jwtDecode(response.data.token);
+      login(response.data.token); // Update context state
       const userRole = decodedToken.role;
-  
+
       toast({
         title: "Login successful.",
         description: "You have successfully logged in.",
@@ -63,7 +66,7 @@ function Auth() {
         duration: 5000,
         isClosable: true,
       });
-  
+
       // Redirect based on role
       switch (userRole) {
         case "doctor":
@@ -95,13 +98,13 @@ function Auth() {
       });
     }
   };
-  
+
   const signupHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(
-        "http://localhost:5001/api/v1/auth/patient/signup",
+      await api.post(
+        "/auth/patient/signup",
         signupData
       );
       setLoading(false);
@@ -131,7 +134,7 @@ function Auth() {
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Stack align={"center"} flex={0.5}>
             <Link to="/">
-              <Image src={logo} alt="logo" width={"150px"} mt={"50px"}/>
+              <Image src={logo} alt="logo" width={"150px"} mt={"50px"} />
             </Link>
             <Heading className="display-6">Login & Sign Up</Heading>
             <TabList alignSelf={"center"} justifyContent={"center"}>
@@ -206,43 +209,43 @@ function Auth() {
                       name="email"
                       onChange={changeSignupHandler}
                       value={signupData.email}
-                      ></Input>
-                      <Input
-                        type="password"
-                        className="form-control form-control-sm m-2 p-2"
-                        placeholder="Password"
-                        name="password"
-                        onChange={changeSignupHandler}
-                        value={signupData.password}
-                      ></Input>
-                      <Input
-                        type="text"
-                        className="form-control form-control-sm m-2 p-2"
-                        placeholder="National ID"
-                        name="nationalId"
-                        onChange={changeSignupHandler}
-                        value={signupData.nationalId}
-                      ></Input>
-                      <Button
-                        type="submit"
-                        w={"100%"}
-                        backgroundColor={"#9747FF"}
-                        color={"white"}
-                        _hover={{ backgroundColor: "#AC6BFF" }}
-                        mt={4}
-                        isLoading={loading}
-                      >
-                        Sign Up
-                      </Button>
-                    </div>
-                  </form>
-                </TabPanel>
-              </TabPanels>
-            </Stack>
-          </Flex>
-        </Tabs>
-      </Flex>
-    );
-  }
-  
-  export default Auth;
+                    ></Input>
+                    <Input
+                      type="password"
+                      className="form-control form-control-sm m-2 p-2"
+                      placeholder="Password"
+                      name="password"
+                      onChange={changeSignupHandler}
+                      value={signupData.password}
+                    ></Input>
+                    <Input
+                      type="text"
+                      className="form-control form-control-sm m-2 p-2"
+                      placeholder="National ID"
+                      name="nationalId"
+                      onChange={changeSignupHandler}
+                      value={signupData.nationalId}
+                    ></Input>
+                    <Button
+                      type="submit"
+                      w={"100%"}
+                      backgroundColor={"#9747FF"}
+                      color={"white"}
+                      _hover={{ backgroundColor: "#AC6BFF" }}
+                      mt={4}
+                      isLoading={loading}
+                    >
+                      Sign Up
+                    </Button>
+                  </div>
+                </form>
+              </TabPanel>
+            </TabPanels>
+          </Stack>
+        </Flex>
+      </Tabs>
+    </Flex>
+  );
+}
+
+export default Auth;

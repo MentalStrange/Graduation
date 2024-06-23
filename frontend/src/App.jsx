@@ -5,7 +5,7 @@ import { AuthProvider } from "./Context/AuthenticationContext.jsx";
 const App = () => {
   return (
     <AuthProvider>
-      <RoleProvider>
+          <RoleProvider>
         <RouterProvider router={router} />
       </RoleProvider>
     </AuthProvider>

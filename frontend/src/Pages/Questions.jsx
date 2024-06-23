@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import {
   Box,
@@ -24,6 +24,7 @@ function Questions() {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   const questions = [
     "What is your gender? (Enter 1 for male, 0 for female)",
@@ -47,10 +48,9 @@ function Questions() {
 
   const handleNextQuestion = (event) => {
     event.preventDefault();
-    const form = event.target;
+    const form = formRef.current;
     const input = form.elements["answer"];
     const value = input.value;
-    const question = questions[questionIndex];
 
     // Validation
     if (questionIndex === 1 && (value < 1 || value > 100)) {
@@ -163,6 +163,7 @@ function Questions() {
           justifyContent="center"
           alignItems="center"
           position="relative"
+          zIndex="0" // Ensure the Box is below the menu
         >
           <Box
             position="absolute"
@@ -196,6 +197,7 @@ function Questions() {
         justifyContent="center"
         alignItems="center"
         position="relative"
+        zIndex="0" // Ensure the Box is below the menu
       >
         <Box
           position="absolute"
@@ -216,7 +218,7 @@ function Questions() {
           <Heading as="h2" size="lg" mb={6} color="white">
             Answer Questions
           </Heading>
-          <form onSubmit={handleNextQuestion}>
+          <form ref={formRef} onSubmit={handleNextQuestion}>
             <VStack spacing={4}>
               <FormControl id="answer">
                 <FormLabel fontWeight="bold" fontSize="lg" color="white" mb={4}>
@@ -229,6 +231,7 @@ function Questions() {
                   required
                   bg="white"
                   defaultValue={answers[questionIndex]}
+                  zIndex="3" // Ensure the input is above the background
                 />
               </FormControl>
               <HStack justify="space-between" width="100%">

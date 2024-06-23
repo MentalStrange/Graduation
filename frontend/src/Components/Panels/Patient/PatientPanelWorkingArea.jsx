@@ -10,7 +10,6 @@ import { usePatientState } from "../../../Context/PatientContext/PatientContext"
 
 function PatientPanelWorkingArea() {
   const { doctors, patient, loading, error } = usePatientState();
-  console.log(doctors,"doctors");
   if (loading) {
     return <Spinner />;
   }

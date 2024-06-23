@@ -129,7 +129,7 @@ function DoctorAppointments() {
   return (
     <Flex height="85vh" overflowY="auto">
       <Box flex="1" p="4">
-        <Heading mb="4">Manage Appointments</Heading>
+        <Heading mb="4" size="lg">Appointments</Heading>
         <TableContainer>
           <Table variant="striped" colorScheme="gray">
             <Thead>

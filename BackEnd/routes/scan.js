@@ -1,5 +1,5 @@
 import express from 'express'
-import { createScan, getScanByPatientId, getScansByRadiologistId, getScansByRadiologyCenterId, updateScan } from '../controller/scanController.js';
+import { createScan, getScanByPatientId, getScanByReportId, getScansByRadiologistId, getScansByRadiologyCenterId, updateScan } from '../controller/scanController.js';
 
 const Router = express.Router()
 
@@ -8,6 +8,7 @@ Router.post('/', createScan);
 Router.get('/radiologyCenter/:id', getScansByRadiologyCenterId);
 Router.get('/radiologist/:id',getScansByRadiologistId);
 Router.patch('/:id',updateScan);
+Router.get('/report/:id',getScanByReportId)
 
 
 
