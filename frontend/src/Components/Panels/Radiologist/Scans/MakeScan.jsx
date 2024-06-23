@@ -61,6 +61,7 @@ function MakeScan() {
       }
     }
   }, []);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -98,7 +99,7 @@ function MakeScan() {
       );
       const response2 = await axios.patch(`http://localhost:5001/api/v1/scan/${scanId}`,{
         reportId:response.data.data._id
-      })
+      });
       console.log(response2);
       if (response.data.status === "success") {
         toast({
@@ -210,13 +211,13 @@ function MakeScan() {
           <Button mt={2} onClick={handleUpload}>
             Upload Scan
           </Button>
-          {prediction === 1 && (
+          {prediction !== null && (
             <Flex direction="column" align="center" mt={4} mb={20}>
-              <Text color="red.500" fontSize="xl" fontWeight="bold">
-                Warning: Potential Stroke Detected!
+              <Text color={prediction === 1 ? "red.500" : "green.500"} fontSize="xl" fontWeight="bold">
+                {prediction === 1 ? "Warning: Potential Stroke Detected!" : "No Stroke Detected"}
               </Text>
-              <Button colorScheme="red" mt={2} onClick={openModal}>
-                Report Issue
+              <Button colorScheme={prediction === 1 ? "red" : "green"} mt={2} onClick={openModal}>
+                {prediction === 1 ? "Report Issue" : "Write Report"}
               </Button>
             </Flex>
           )}

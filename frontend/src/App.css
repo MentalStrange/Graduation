@@ -113,3 +113,5 @@ body {
 .read-the-docs {
   color: #888;
 }
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";

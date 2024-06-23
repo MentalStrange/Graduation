@@ -4,7 +4,6 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Home from "./Pages/Home";
 import Chat from "./Pages/Chat";
 import DoctorPanel from "./Components/Panels/Doctor/DoctorPanel";
 import Layout from "./Components/Panels/Layout";
@@ -52,6 +51,9 @@ import { RadiologistProvider } from "./Context/RadiologistContext/RadiologistCon
 import RadiologistPatientPage from "./Components/Panels/Radiologist/Patients/RadiologistPatientPage";
 import ResultBinaryModel from "./Components/Questions/ResultBinaryModel";
 import Questions from "./Pages/Questions";
+import Home from "./Pages/Home";
+import { ReceptionistProvider } from "./Context/ReceptionistContext.jsx/ReceptionistContext";
+import ReceptionistWorkingArea from "./Components/Panels/Receptionist/ReceptionistWorkingArea";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -106,11 +108,13 @@ const router = createBrowserRouter(
           path="/panel/receptionist"
           element={
             <AuthGuard>
-              <ReceptionistPanel />
+              <ReceptionistProvider>
+                <ReceptionistPanel />
+              </ReceptionistProvider>
             </AuthGuard>
           }
         >
-          <Route index element={<ReceptionistPanel />} />
+          <Route index element={<ReceptionistWorkingArea />} />
           <Route path="doctors" element={<ReceptionistDoctors />} />
           <Route
             path="radiologyCenters"

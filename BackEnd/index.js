@@ -10,6 +10,7 @@ import prescriptionRoutes from "./routes/prescriptions.js";
 import patientRoutes from "./routes/patient.js";
 import radiologyCenterRoutes from "./routes/radiologyCenter.js";
 import appointmentRoutes from "./routes/appointment.js";
+import receptionistRoutes from "./routes/receptionist.js";
 import scanRoutes from "./routes/scan.js";
 import { createServer } from "http";
 import setupSocket from "./socket/socket.js";
@@ -79,6 +80,7 @@ app.use('/api/v1/patient', patientRoutes);
 app.use('/api/v1/radiologyCenter', radiologyCenterRoutes);
 app.use('/api/v1/appointment', appointmentRoutes);
 app.use('/api/v1/scan', scanRoutes);
+app.use('/api/v1/receptionist', receptionistRoutes);
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

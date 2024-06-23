@@ -12,7 +12,7 @@ import {
   Tabs,
   useToast,
 } from "@chakra-ui/react";
-import image8 from "../Images/image8.png";
+import image8 from "./../assets/Images/image8.png";
 import "../styles/App.css";
 import { useState } from "react";
 import axios from "axios";

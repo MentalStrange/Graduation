@@ -1,60 +1,51 @@
-import {
-  Box,
-  Text,
-  HStack,
-  Link,
-  VStack,
-  Divider,
-  Container,
-  Flex,
-} from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faLinkedinIn,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
+// src/components/Footer.jsx
+import { Box, Flex, IconButton, Container, Input, Link, Button, Heading, Image } from '@chakra-ui/react';
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaYoutube } from 'react-icons/fa';
+import logo from './../../assets/Images/logo.png';
 
-function Footer() {
-  return (
-    <Box bg="gray.200" py={5}>
+const Footer = () => (
+  <Box bg="black" color="white" pt={16}>
+    <Box bg="orange.50" color="black" py={16} textAlign="center">
       <Container maxW="container.xl">
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          align="center"
-        >
-          <VStack align="start">
-            <Text fontWeight="bold">Contact Us</Text>
-            <Divider />
-            <VStack align="start" spacing={1}>
-              <Text>Tel: 000-000-000</Text>
-              <Text>Address: Benha</Text>
-              <Text>Fax: 000-000-000</Text>
-            </VStack>
-          </VStack>
-          <VStack align="start">
-            <Text fontWeight="bold">Important Links</Text>
-            <Divider />
-            <HStack spacing={4}>
-              <Link href="https://www.facebook.com" isExternal>
-                <FontAwesomeIcon icon={faFacebookF} size="lg" />
-              </Link>
-              <Link href="https://www.youtube.com" isExternal>
-                <FontAwesomeIcon icon={faYoutube} size="lg" />
-              </Link>
-              <Link href="https://www.linkedin.com" isExternal>
-                <FontAwesomeIcon icon={faLinkedinIn} size="lg" />
-              </Link>
-            </HStack>
-          </VStack>
+        <Heading as="h3" size="lg" mb={4}>
+          Sign Up For An Appointment With The Doctor Today!
+        </Heading>
+        <Flex justify="center" align="center">
+          <Input
+            placeholder="Your Email Address"
+            size="lg"
+            maxW="400px"
+            mr={4}
+            bg="white"
+          />
+          <Button colorScheme="orange" size="lg">
+            Subscribe
+          </Button>
         </Flex>
-        <Text textAlign="center" mt={4}>
-          &copy; 2024 All rights reserved.
-        </Text>
       </Container>
     </Box>
-  );
-}
+    <Container maxW="container.xl" mt={16} pt={8} pb={8} borderTop="1px solid gray">
+      <Flex direction="column" align="center">
+      <Link to="/" _hover={{ textDecoration: 'none' }}>
+          <Image src={logo} alt="Logo" width="150px" height="45px" mb={4}/>
+        </Link>
+        <Flex mb={8}>
+          <Link href="#hero" mx={2}>Home</Link>
+          <Link href="#about" mx={2}>About Me</Link>
+          <Link href="#services" mx={2}>Services</Link>
+          <Link href="#testimonial" mx={2}>Testimonial</Link>
+          <Link href="#topDoctors" mx={2}>Top Doctors</Link>
+        </Flex>
+        <Flex>
+          <IconButton as="a" href="#" icon={<FaFacebook />} bg="black" color="white" mx={2} />
+          <IconButton as="a" href="#" icon={<FaInstagram />} bg="black" color="white" mx={2} />
+          <IconButton as="a" href="#" icon={<FaLinkedin />} bg="black" color="white" mx={2} />
+          <IconButton as="a" href="#" icon={<FaYoutube />} bg="black" color="white" mx={2} />
+          <IconButton as="a" href="#" icon={<FaTwitter />} bg="black" color="white" mx={2} />
+        </Flex>
+      </Flex>
+    </Container>
+  </Box>
+);
 
 export default Footer;

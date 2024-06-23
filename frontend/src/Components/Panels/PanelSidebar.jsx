@@ -52,13 +52,13 @@ function PanelSidebar({ onToggle, isOpen }) {
     patient: [
       { to: "/panel/patient", label: "Dashboard" },
       { to: "/panel/patient/appointments", label: "Appointments" },
-      {to:"/panel/patient/radiologyCenter", label:"Radiology Center"},
+      {to:"/panel/patient/radiologyCenter", label:"Radiology Center Appointments"},
       { to: "/panel/patient/reports", label: "Reports" },
       { to: "/panel/patient/scans", label: "Scans" },
       { to: "/panel/patient/prescriptions", label: "Prescriptions" },
       { to: "/panel/patient/doctors", label: "Doctors" },
+      // {to:"/panel/patient/chat", label:"Chat"},
       {to:"/panel/patient/settings", label:"Settings"},
-      {to:"/panel/patient/chat", label:"Chat"},
       { to: "/logout", label: "Logout" },
     ],
     radiologyCenter: [
@@ -104,10 +104,10 @@ function PanelSidebar({ onToggle, isOpen }) {
           <VStack align="stretch" spacing={2}>
             {role && isOpen && (
               <>
-                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">ACADEMIC</Text>
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SPECIALIZED</Text>
                 {renderLinks(linksByRole[role].slice(0, 4))}
                 <hr style={{ width: "100%", borderColor: "white" }} />
-                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">ADMINISTRATIVE</Text>
+                <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">GENERAL</Text>
                 {renderLinks(linksByRole[role].slice(4, 7))}
                 <hr style={{ width: "100%", borderColor: "white" }} />
                 <Text fontSize={"10px"} m={0} fontWeight="bold" color="white">SETTINGS</Text>

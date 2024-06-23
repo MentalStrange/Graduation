@@ -46,6 +46,7 @@ export const getAllDoctor = async (req, res) => {
       const transformDoctor = await Promise.all(doctors.map(async (doctor) => {
         return doctorTransformation(doctor)
       }))
+      console.log(transformDoctor);
       return res.status(200).json({
         status: "success",
         data: transformDoctor,

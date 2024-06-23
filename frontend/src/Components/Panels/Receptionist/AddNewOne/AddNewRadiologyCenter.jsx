@@ -64,7 +64,7 @@ function AddNewRadiologyCenter() {
       <Stack flex={1} p={8} spacing={4}>
         <form onSubmit={signupHandler}>
           <Heading as="h2" size="lg" textAlign="center">
-            Add New Doctor
+            Add New Radiology Center
           </Heading>
           <Stack spacing={4}>
             <Input

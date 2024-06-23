@@ -1,11 +1,8 @@
 import { Box, Button, Flex, Heading, Table, Thead, Tbody, Tr, Th, Td, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
-import { useContext } from 'react';
-import { ReceptionistRadiologistsContext } from '../../../../Context/ReceptionistContext.jsx/ReceptionistRadiologistsContext';
-
-
+import { useReceptionistState } from '../../../../Context/ReceptionistContext.jsx/ReceptionistContext';
 
 function ReceptionistRadiologist() {
-  const { radiologists, loading, error } = useContext(ReceptionistRadiologistsContext);
+  const { radiologists, loading, error } = useReceptionistState();
 
   if (loading) {
     return <Spinner />;
@@ -17,6 +14,17 @@ function ReceptionistRadiologist() {
         <AlertIcon />
         {error.message}
       </Alert>
+    );
+  }
+
+  if (!radiologists || radiologists.length === 0) {
+    return (
+      <Box p={4}>
+        <Alert status="info">
+          <AlertIcon />
+          No radiologists available.
+        </Alert>
+      </Box>
     );
   }
 
@@ -36,7 +44,7 @@ function ReceptionistRadiologist() {
           </Tr>
         </Thead>
         <Tbody>
-          {radiologists.data.map((radiologist, index) => (
+          {radiologists?.data?.map((radiologist, index) => (
             <Tr key={index}>
               <Td>{radiologist.name}</Td>
               <Td>{radiologist.specialization}</Td>

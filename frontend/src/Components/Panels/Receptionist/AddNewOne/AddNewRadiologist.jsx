@@ -53,7 +53,7 @@ function AddNewRadiologist() {
         duration: 3000,
         isClosable: true,
       });
-      navigate("panel/receptionist/radiologists");
+      navigate("/panel/receptionist/radiologists");
     } catch (error) {
       setLoading(false);
       toast({
@@ -71,7 +71,7 @@ function AddNewRadiologist() {
       <Stack flex={1} p={8} spacing={4}>
         <form onSubmit={signupHandler}>
           <Heading as="h2" size="lg" textAlign="center">
-            Add New Doctor
+            Add New Radiologist
           </Heading>
           <Stack spacing={4}>
             <Input

@@ -53,7 +53,7 @@ function AddNewDoctor() {
         duration: 3000,
         isClosable: true,
       });
-      navigate("/dashboard");
+      navigate("/panel/receptionist/doctors");
     } catch (error) {
       setLoading(false);
       toast({
