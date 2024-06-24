@@ -1,6 +1,7 @@
 import { doctorTransformation } from "../format/transformation.js";
 import { checkApproved } from "../helper/checkApprovedDoctor.js";
 import Doctor from "../model/doctorModel.js";
+import Prescription from "../model/prescriptionModel.js";
 import bcrypt from "bcrypt";
 
 export const updateDoctor = async (req, res) => {
@@ -73,6 +74,36 @@ export const getDoctorById = async (req, res) => {
         data: await doctorTransformation(doctor),
       });
     }
+  } catch (error) {
+    return res.status(500).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+import Prescription from "../model/prescriptionModel.js";
+
+export const getTopDoctors = async (req, res) => {
+  try {
+    const topDoctors = await Prescription.aggregate([
+      { $group: { _id: "$doctor", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 3 },
+      { $lookup: {
+          from: "doctors",
+          localField: "_id",
+          foreignField: "_id",
+          as: "doctor"
+        }
+      },
+      { $unwind: "$doctor" },
+      { $project: { _id: 0, doctor: 1, count: 1 } }
+    ]);
+
+    return res.status(200).json({
+      status: "success",
+      data: topDoctors,
+    });
   } catch (error) {
     return res.status(500).json({
       status: "fail",

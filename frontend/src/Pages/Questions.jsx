@@ -12,18 +12,19 @@ import {
   Spinner,
   Text,
   useToast,
+  Button,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import MRIBackground from "./../assets/Images/MRIBackground.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Navbar from "../Components/Home/Navbar";
 
 function Questions() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(Array(17).fill(""));
   const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
   const toast = useToast();
-  const navigate = useNavigate();
   const formRef = useRef(null);
 
   const questions = [
@@ -64,7 +65,7 @@ function Questions() {
       return;
     }
 
-    if (questionIndex === 6 && (value < 50 || value > 200)) {
+    if (questionIndex === 6 && (value < 50 || value > 250)) {
       toast({
         title: "Invalid Input",
         description: "Glucose Level must be between 50 and 200.",
@@ -75,7 +76,7 @@ function Questions() {
       return;
     }
 
-    if (questionIndex === 7 && (value < 10 || value > 30)) {
+    if (questionIndex === 7 && (value < 10 || value > 40)) {
       toast({
         title: "Invalid Input",
         description: "BMI must be between 10 and 30.",
@@ -127,17 +128,19 @@ function Questions() {
       const response = await axios.post("http://localhost:5000/model", {
         data: finalAnswers,
       });
+      const result = response?.data?.data?.prediction;
+      setIsLoading(false);
+      setResult(result);
 
-      const result = response.data;
       toast({
-        title: "Prediction received.",
-        description: `Prediction: ${result}`,
-        status: "success",
+        title: "Model Result",
+        description: result === 1 
+          ? "You Need To Book an Appointment. This is dangerous."
+          : "You Do Not Need To Book an Appointment. This is safe.",
+        status: result === 1 ? "error" : "success",
         duration: 5000,
         isClosable: true,
       });
-      setIsLoading(false);
-      navigate("/result", { state: { result } }); // Navigate to result page
     } catch (error) {
       toast({
         title: "An error occurred.",
@@ -179,6 +182,72 @@ function Questions() {
             <Text fontSize="lg" color="white" mt={4}>
               Processing the Data By ML Model
             </Text>
+          </Box>
+        </Box>
+      </>
+    );
+  }
+
+  if (result !== null) {
+    const resultMessage = result === 1 
+      ? "You Need To Book an Appointment"
+      : "You Do Not Need To Book an Appointment";
+
+    const buttonText = result === 1 
+      ? "Book your appointment"
+      : "Explore More";
+
+    const linkTo = result === 1 
+      ? "/auth"
+      : "/";
+
+    const resultColor = result === 1 ? "red.500" : "green.500";
+
+    return (
+      <>
+        <Navbar />
+        <Box
+          height="100vh"
+          backgroundImage={`url(${MRIBackground})`}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          position="relative"
+        >
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            backgroundColor="rgba(0, 0, 0, 0.5)"
+            zIndex="1"
+          />
+          <Box
+            textAlign="center"
+            width="100%"
+            maxWidth="600px"
+            p={8}
+            zIndex="2"
+            position="relative"
+            backgroundColor="rgba(255, 255, 255, 0.9)"
+            borderRadius="lg"
+            boxShadow="lg"
+          >
+            <Heading as="h2" size="xl" mb={6} color={resultColor}>{resultMessage}</Heading>
+            <VStack spacing={4}>
+              <Button
+                as={RouterLink}
+                to={linkTo}
+                colorScheme="purple"
+                size="lg"
+                rightIcon={<ArrowForwardIcon />}
+              >
+                {buttonText}
+              </Button>
+            </VStack>
           </Box>
         </Box>
       </>

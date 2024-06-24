@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { createServer } from "http";
+import setupSocket from "./socket/socket.js";
 import authRoutes from "./routes/auth.js";
 import reportRoutes from "./routes/report.js";
 import doctorRoutes from "./routes/doctor.js";
@@ -12,8 +14,6 @@ import radiologyCenterRoutes from "./routes/radiologyCenter.js";
 import appointmentRoutes from "./routes/appointment.js";
 import receptionistRoutes from "./routes/receptionist.js";
 import scanRoutes from "./routes/scan.js";
-import { createServer } from "http";
-import setupSocket from "./socket/socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
@@ -29,7 +29,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-
+// Image upload route
 app.post('/upload', (req, res) => {
   const { image, fileName } = req.body;
   if (!image || !fileName) {
@@ -55,14 +55,13 @@ app.post('/upload', (req, res) => {
 // Serve the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-await mongoose.connect(process.env.MONGO_URL_DEV)
+await mongoose.connect(process.env.MONGO_URL_LOCAL)
   .then(() => console.log("Connected to database"))
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
 
-// Socket.io
 const server = createServer(app);
 setupSocket(server);
 

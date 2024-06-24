@@ -5,12 +5,11 @@ import Sidebar from "./Sidebar";
 import WorkingArea from "./WorkingArea";
 import { decodeToken } from "../../../Utils/JWT_Decode";
 
-const socket = io("http://localhost:5001/");
-
 const Main = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
+  const [socket, setSocket] = useState(null); // State to hold the socket instance
   const token = localStorage.getItem("userToken");
   const decodedToken = decodeToken(token);
   const userId = decodedToken.id;
@@ -20,34 +19,30 @@ const Main = () => {
   const localMessages = useRef(new Set());
 
   useEffect(() => {
-    const handleMessageReceive = (message) => {
-      console.log("Received message:", message);
-
-      // Check if the message was sent locally
-      if (localMessages.current.has(message.timestamp)) {
-        console.log("Message was sent locally, not appending again:", message);
-        localMessages.current.delete(message.timestamp);
-      } else {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { ...message, type: message.senderId === userId ? "self" : "other", contentType: message.type },
-        ]);
-      }
-    };
-
-    socket.on("receiveMessage", handleMessageReceive);
-
-    return () => {
-      socket.off("receiveMessage", handleMessageReceive);
-    };
-  }, [userId]);
-
-  useEffect(() => {
     if (selectedContact) {
-      console.log("Joining room with:", { userId, doctorId: selectedContact.id });
-      socket.emit("joinRoom", { userId, doctorId: selectedContact.id, userModel: userRole });
+      const newSocket = io("http://localhost:5001/");
+      setSocket(newSocket);
 
-      socket.on("pastMessages", (pastMessages) => {
+      const handleMessageReceive = (message) => {
+        console.log("Received message:", message);
+
+        // Check if the message was sent locally
+        if (localMessages.current.has(message.timestamp)) {
+          console.log("Message was sent locally, not appending again:", message);
+          localMessages.current.delete(message.timestamp);
+        } else {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { ...message, type: message.senderId === userId ? "self" : "other", contentType: message.type },
+          ]);
+        }
+      };
+
+      newSocket.on("receiveMessage", handleMessageReceive);
+
+      newSocket.emit("joinRoom", { userId, doctorId: selectedContact.id, userModel: userRole });
+
+      newSocket.on("pastMessages", (pastMessages) => {
         setMessages(pastMessages.map((message) => ({
           ...message,
           type: message.sender === userId ? "self" : "other",
@@ -55,14 +50,17 @@ const Main = () => {
         })));
       });
 
-      socket.on("joinedRoom", ({ chatRoomId }) => {
+      newSocket.on("joinedRoom", ({ chatRoomId }) => {
         setChatRoomId(chatRoomId);
       });
 
       return () => {
-        socket.off("pastMessages");
-        socket.off("joinedRoom");
-        socket.emit("leaveRoom", { roomId: chatRoomId });
+        newSocket.off("receiveMessage", handleMessageReceive);
+        newSocket.off("pastMessages");
+        newSocket.off("joinedRoom");
+        newSocket.emit("leaveRoom", { roomId: chatRoomId });
+        newSocket.disconnect();
+        setSocket(null);
       };
     }
   }, [selectedContact, userId, userRole]);
@@ -117,7 +115,7 @@ const Main = () => {
             fileName: file.name.split('.')[0]
           })
         });
-        
+
         const data = await response.json();
         handleSendMessage(`http://localhost:5001${data.imageUrl}`, 'image');
       };
