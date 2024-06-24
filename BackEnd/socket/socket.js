@@ -1,4 +1,3 @@
-// socket.js
 import { Server } from "socket.io";
 import Message from "../model/messageModel.js";
 import ChatRoom from "../model/chatRoomModel.js";
@@ -39,26 +38,27 @@ export default function setupSocket(server) {
       }
     });
 
-    socket.on('sendMessage', async ({ chatRoomId, senderId, senderType, receiverId, receiverType, content, type }) => {
+    socket.on('sendMessage', async ({ chatRoomId, senderId, senderType, receiverId, receiverType, content, type, messageId }) => {
       try {
         if (!chatRoomId) {
           throw new Error('chatRoomId is required');
         }
-    
+
         const messageData = {
           chatRoom: chatRoomId,
           content: content,
-          type: type, // Ensure this is included
+          type: type,
           timestamp: new Date().toISOString(),
           sender: senderId,
           senderModel: senderType,
           receiver: receiverId,
           receiverModel: receiverType,
+          messageId: messageId, // Ensure this is included
         };
-    
+
         const message = new Message(messageData);
         await message.save();
-    
+
         io.to(chatRoomId).emit('receiveMessage', {
           chatRoomId,
           senderId,
@@ -66,8 +66,9 @@ export default function setupSocket(server) {
           receiverId,
           receiverType,
           content,
-          type, // Ensure this is included
+          type,
           timestamp: message.timestamp,
+          messageId: messageId, // Ensure this is included
         });
       } catch (error) {
         console.error(`Error sending message from ${socket.id}:`, error);

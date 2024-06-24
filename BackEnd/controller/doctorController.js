@@ -81,8 +81,6 @@ export const getDoctorById = async (req, res) => {
     });
   }
 };
-import Prescription from "../model/prescriptionModel.js";
-
 export const getTopDoctors = async (req, res) => {
   try {
     const topDoctors = await Prescription.aggregate([
