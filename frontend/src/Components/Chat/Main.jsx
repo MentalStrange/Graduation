@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image } from "@chakra-ui/react";
 import Sidebar from "./Sidebar";
 import WorkingArea from "./WorkingArea";
 import { decodeToken } from "../../../Utils/JWT_Decode";
+import { v4 as uuidv4 } from 'uuid';
+import chatImage from "../../assets/Images/Chat.png";
 
 const Main = () => {
   const [selectedContact, setSelectedContact] = useState(null);
@@ -26,10 +28,10 @@ const Main = () => {
       const handleMessageReceive = (message) => {
         console.log("Received message:", message);
 
-        // Check if the message was sent locally
-        if (localMessages.current.has(message.timestamp)) {
+        // Check if the message was sent locally using the unique identifier
+        if (localMessages.current.has(message.messageId)) {
           console.log("Message was sent locally, not appending again:", message);
-          localMessages.current.delete(message.timestamp);
+          localMessages.current.delete(message.messageId);
         } else {
           setMessages((prevMessages) => [
             ...prevMessages,
@@ -66,6 +68,7 @@ const Main = () => {
   }, [selectedContact, userId, userRole]);
 
   const handleSendMessage = (content, type = 'text') => {
+    const messageId = uuidv4(); // Generate a unique identifier for the message
     const timestamp = new Date().toISOString();
     const receiverId = selectedContact.id;
     const receiverType = userRole === 'doctor' ? 'Patient' : 'Doctor';
@@ -79,6 +82,7 @@ const Main = () => {
       content,
       type,
       timestamp,
+      messageId, // Add the unique identifier to the message object
     };
     console.log("Sending message:", message);
 
@@ -87,8 +91,8 @@ const Main = () => {
       return;
     }
 
-    // Track the locally sent message
-    localMessages.current.add(timestamp);
+    // Track the locally sent message using the unique identifier
+    localMessages.current.add(messageId);
     console.log("Local messages set after adding:", localMessages.current);
 
     setMessages((prevMessages) => [
@@ -137,8 +141,9 @@ const Main = () => {
             onImageUpload={handleImageUpload} // Pass the image upload handler
           />
         ) : (
-          <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-            <Heading>Select a contact to start chatting</Heading>
+          <Box flex="1" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <Image src={chatImage} alt="Chat" width="40%" />
+            <Heading size={'lg'} mt={5} color={'purple.700'} fontFamily={'Poppins'}>Select a contact to start chatting</Heading>
           </Box>
         )}
       </Flex>

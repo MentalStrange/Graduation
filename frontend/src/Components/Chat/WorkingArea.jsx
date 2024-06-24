@@ -18,7 +18,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState, useEffect, useRef, useCallback } from "react";
 import MessageOther from "./MessageOther";
 import MessageSelf from "./MessageSelf";
-import { AttachmentIcon } from "@chakra-ui/icons";
+import { AttachmentIcon, DeleteIcon, SettingsIcon, WarningTwoIcon } from "@chakra-ui/icons";
 
 const WorkingArea = ({ contact, messages = [], onSendMessage, onImageUpload }) => {
   const [newMessage, setNewMessage] = useState("");
@@ -50,7 +50,7 @@ const WorkingArea = ({ contact, messages = [], onSendMessage, onImageUpload }) =
 
   return (
     <Flex direction="column" flex="1" maxHeight="100%" overflow="hidden">
-      <Flex align="center" justify="space-between" p={2} borderBottom="1px solid #e2e8f0">
+      <Flex align="center" justify="space-between" p={2} >
         <Flex align="center">
           <Avatar size="md" mr={3} src={contact.image}>
             <AvatarBadge boxSize="0.9em" bg="green.500" />
@@ -65,12 +65,13 @@ const WorkingArea = ({ contact, messages = [], onSendMessage, onImageUpload }) =
             aria-label="Options"
             icon={<MoreVertIcon />}
             variant="outline"
+            border={0}
           />
           <MenuList>
-            <MenuItem icon={<MoreVertIcon />}>New Tab</MenuItem>
-            <MenuItem icon={<MoreVertIcon />}>New Window</MenuItem>
-            <MenuItem icon={<MoreVertIcon />}>Open Closed Tab</MenuItem>
-            <MenuItem icon={<MoreVertIcon />}>Open File...</MenuItem>
+            <MenuItem icon={<AttachmentIcon />}>Attachment</MenuItem>
+            <MenuItem icon={<WarningTwoIcon />}>Block</MenuItem>
+            <MenuItem icon={<DeleteIcon />}>Delete Chat</MenuItem>
+            <MenuItem icon={<SettingsIcon />}>Setting</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
@@ -90,7 +91,7 @@ const WorkingArea = ({ contact, messages = [], onSendMessage, onImageUpload }) =
         </Stack>
       </Box>
 
-      <Flex p={4} borderTop="1px solid #e2e8f0" align="center">
+      <Flex p={2} borderTop="1px solid #e2e8f0" align="center">
         <Input
           placeholder="Type your message..."
           value={newMessage}
@@ -105,10 +106,10 @@ const WorkingArea = ({ contact, messages = [], onSendMessage, onImageUpload }) =
           style={{ display: "none" }}
           id="image-upload"
         />
-        <Button as="label" htmlFor="image-upload" mr={2} bg={'transparent'} colorScheme="gray" color={'black'}>
+        <Button as="label" htmlFor="image-upload" mr={2} bg={'transparent'} colorScheme="gray" color={'black'} size={"sm"}>
           <AttachmentIcon />
         </Button>
-        <Button onClick={handleSendMessage} colorScheme="teal">
+        <Button onClick={handleSendMessage} colorScheme="purple" size={"sm"}>
           Send
         </Button>
       </Flex>

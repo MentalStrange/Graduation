@@ -2,7 +2,7 @@
 import { Link,Box, Flex, Button, Container, Image, Text, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from "@chakra-ui/react";
 import {  useNavigate, Link as RouterLink } from "react-router-dom";
 import logo from "./../../assets/Images/purpleLogo.png";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthenticationContext";
 import { useDoctorState } from "../../Context/DoctorContext/DoctorContext";
 import { usePatientState } from "../../Context/PatientContext/PatientContext";
@@ -12,38 +12,14 @@ import { useReceptionistState } from "../../Context/ReceptionistContext.jsx/Rece
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useContext(AuthContext);
-  const [contextState, setContextState] = useState(null);
-  const doctorState = useDoctorState();
-  const patientState = usePatientState();
-  const receptionistState = useReceptionistState();
-  const radiologistState = useRadiologistState();
-  const radiologyCenterState = useRadiologyCenterState();
+  const {doctor} = useDoctorState();
+  const {patient} = usePatientState();
+  const {receptionist} = useReceptionistState();
+  const {radiologist} = useRadiologistState();
+  const {radiologyCenter} = useRadiologyCenterState();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user && isAuthenticated) {
-      switch (user.role) {
-        case "doctor":
-          setContextState(doctorState);
-          break;
-        case "patient":
-          setContextState(patientState);
-          break;
-        case "receptionist":
-          setContextState(receptionistState);
-          break;
-        case "radiologist":
-          setContextState(radiologistState);
-          break;
-        case "radiologyCenter":
-          setContextState(radiologyCenterState);
-          break;
-        default:
-          setContextState(null);
-      }
-    }
-  }, [user, isAuthenticated, doctorState, patientState, receptionistState, radiologistState, radiologyCenterState]);
-
+  console.log(patient);
   const handleProfileClick = () => {
     switch (user.role) {
       case "doctor":
@@ -68,15 +44,15 @@ const Navbar = () => {
   const getUserAvatar = () => {
     switch (user.role) {
       case "doctor":
-        return contextState?.doctor?.data?.data?.image || user.imageUrl;
+        return doctor?.data?.data?.image || user.imageUrl;
       case "patient":
-        return contextState?.patient?.data?.data?.image || user.imageUrl;
+        return patient?.data?.data?.image || user.imageUrl;
       case "receptionist":
-        return contextState?.receptionist?.data?.data?.image || user.imageUrl;
+        return receptionist?.data?.data?.image || user.imageUrl;
       case "radiologist":
-        return contextState?.radiologist?.data?.data?.image || user.imageUrl;
+        return radiologist?.data?.data?.image || user.imageUrl;
       case "radiologyCenter":
-        return contextState?.radiologyCenter?.data?.data?.image || user.imageUrl;
+        return radiologyCenter?.data?.data?.image || user.imageUrl;
       default:
         return user.imageUrl;
     }

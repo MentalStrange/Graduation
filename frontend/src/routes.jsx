@@ -49,7 +49,6 @@ import RadiologyCenterWorkingArea from "./Components/Panels/RadiologyCenter/Radi
 import RadiologistWorkingArea from "./Components/Panels/Radiologist/RadiologistWorkingArea";
 import { RadiologistProvider } from "./Context/RadiologistContext/RadiologistContext";
 import RadiologistPatientPage from "./Components/Panels/Radiologist/Patients/RadiologistPatientPage";
-import ResultBinaryModel from "./Components/Questions/ResultBinaryModel";
 import Questions from "./Pages/Questions";
 import Home from "./Pages/Home";
 import { ReceptionistProvider } from "./Context/ReceptionistContext.jsx/ReceptionistContext";
@@ -81,7 +80,6 @@ const router = createBrowserRouter(
         </PatientProvider>
       </DoctorProvider>
       } />
-      <Route path="/result" element={<ResultBinaryModel />} />
       <Route path="/logout" element={<Logout />} />
       <Route element={<Layout />}>
         <Route

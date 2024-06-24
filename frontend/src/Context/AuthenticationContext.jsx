@@ -1,4 +1,3 @@
-// AuthenticationContext.jsx
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
 import { decodeToken } from "../../Utils/JWT_Decode";
