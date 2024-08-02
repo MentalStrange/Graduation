@@ -1,5 +1,3 @@
-Sure! Here is the complete README file as a code block:
-
 ```markdown
 # Brain Stroke Detection and Patient Care System
 
@@ -52,7 +50,7 @@ This project aims to assist patients with brain strokes by connecting radiologis
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/MentalStrange/Graduation)
    cd your-repo-name
    ```
 
@@ -106,7 +104,7 @@ This project aims to assist patients with brain strokes by connecting radiologis
 
 ## Demo
 
-Check out the [demo video](link-to-your-video) to see the system in action.
+Check out the https://drive.google.com/file/d/1DXPUx-h9QXBw6CpDgMONNuPBsPJHShnc/view to see the system in action.
 
 ## Contributing
 
@@ -115,3 +113,6 @@ Contributions are welcome! Please fork the repository and create a pull request 
 ## License
 
 This project is licensed under the MIT License.
+```
+
+You can paste this directly into your README.md file on GitHub. If you need any more adjustments, let me know!
