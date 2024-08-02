@@ -6,7 +6,7 @@
 <a href="https://your-portfolio-link.com"><img src="https://img.shields.io/badge/license-MIT-yellow" alt="License"></a>
 </p>
 <hr>
-<img src="https://github.com/MentalStrange/graduation/frontent/src/assets/images/cover2.png" alt="Project Screenshot">
+<img src="https://github.com/MentalStrange/Graduation/blob/main/frontend/src/assets/Images/MRIBackground.jpg" alt="Project Screenshot">
 <hr>
 <h1> Brain Stroke Detection and Patient Care System </h1>
 <p>This project is designed to assist patients with brain strokes by connecting radiologists, radiology centers, doctors, and patients, streamlining the process of stroke detection and care. The repository contains the source code and documentation for this system.</p>
