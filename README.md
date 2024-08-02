@@ -1,4 +1,4 @@
-<p align="center"><a href="https://your-portfolio-link.com" target="_blank"><img src="(https://drive.google.com/file/d/1_cIVPgs0R9kMCHwgIvCP_4i4nVB-73-B/view?usp=drive_link)" width="250" alt="Project Logo"></a></p>
+<p align="center"><a href="https://your-portfolio-link.com" target="_blank"><img src="https://github.com/MentalStrange/graduation/frontent/src/assets/images/logo.png" width="250" alt="Project Logo"></a></p>
 <p align="center">
 <a href="https://your-portfolio-link.com"><img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build Status"></a>
 <a href="https://your-portfolio-link.com"><img src="https://img.shields.io/badge/downloads-1000+-blue" alt="Total Downloads"></a>
@@ -6,7 +6,7 @@
 <a href="https://your-portfolio-link.com"><img src="https://img.shields.io/badge/license-MIT-yellow" alt="License"></a>
 </p>
 <hr>
-<img src="https://your-screenshot-link.com" alt="Project Screenshot">
+<img src="https://github.com/MentalStrange/graduation/frontent/src/assets/images/cover2.png" alt="Project Screenshot">
 <hr>
 <h1> Brain Stroke Detection and Patient Care System </h1>
 <p>This project is designed to assist patients with brain strokes by connecting radiologists, radiology centers, doctors, and patients, streamlining the process of stroke detection and care. The repository contains the source code and documentation for this system.</p>
